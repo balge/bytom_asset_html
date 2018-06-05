@@ -49,8 +49,12 @@
 							<h3>待审核资产</h3>
 							<div class="asset-table">
 								<div class="operate-list clearfix">
-									<div class="del-asset btn-danger">批量删除</div>
-									<div class="pending-asset btn-info">批量审核</div>
+									<button type="button" class="btn btn-danger btn-lg btn-allDel">
+									批量删除
+									</button>
+									<button type="button" class="btn btn-info btn-lg btn-allPending">
+									批量审批
+									</button>
 								</div>
 								<div class="table-box">
 									
@@ -62,6 +66,7 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal-box"></div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
@@ -71,9 +76,12 @@
 		var T = {
 			init: function(){
 				var self = this;
+				self.index = 0;
 				self.userName = self.getCookie('username');
 				self.loginStatus();
 				self.renderAsset();
+				self.operateAsset();
+				self.checkAl();
 				self.logout();
 			},
 			loginStatus: function(){
@@ -91,6 +99,15 @@
 			        loginStatus: loginStatus//已经登录
 			    });
 			    $('.navbar-collapse').html(navBarHtml);
+			},
+			checkAl: function(){
+				var self = this;
+				$('.asset-block').on('click', '.checkAll', function(event) {
+					var status = $(this).is(":checked");
+					$('.asset-table .checkSingle').each(function(index, el) {
+						$(this).prop('checked', status);
+					});
+				});
 			},
 			renderAsset: function(){
 				var self = this;
@@ -154,6 +171,155 @@
 					items: data.data
 			    });
 			    $('.asset-pending .table-box').html(assetHtml);
+			},
+			operateAsset: function(){
+				var self = this;
+
+				//显示确认操作弹窗
+				$('.btn-allDel').on('click', function(event) {
+					event.preventDefault();
+					var modalHtml = template($('#modalTpl').html(), {
+				        tips: '确定批量删除选中资产？',
+				        type: "delAll"
+				    });
+				    $('.modal-box').html(modalHtml);
+				    $('#myModal').modal();
+				});
+
+				$('.btn-allPending').on('click', function(event) {
+					event.preventDefault();
+					var modalHtml = template($('#modalTpl').html(), {
+				        tips: '确定批量审批选中资产？',
+				        type: "pendingAll"
+				    });
+				    $('.modal-box').html(modalHtml);
+				    $('#myModal').modal();
+				});
+
+				$('body').on('click', '.btn-del', function(event) {
+					event.preventDefault();
+					self.index = parseInt($(this).parents('.item').attr('data-id'));
+					var index = self.index + 1;
+					var modalHtml = template($('#modalTpl').html(), {
+				        tips: '确定删除第' + index + '条资产？',
+				        type: "delOne"
+				    });
+				    $('.modal-box').html(modalHtml);
+				    $('#myModal').modal();
+				});
+
+				$('body').on('click', '.btn-pending', function(event) {
+					event.preventDefault();
+					self.index = parseInt($(this).parents('.item').attr('data-id'));
+					var index = self.index + 1;
+					var modalHtml = template($('#modalTpl').html(), {
+				        tips: '确定审批第' + index + '条资产？',
+				        type: "pendingOne"
+				    });
+				    $('.modal-box').html(modalHtml);
+				    $('#myModal').modal();
+				});
+
+				//批量删除
+				$('body').on('click', '.btn-delAll', function(event) {
+					event.preventDefault();
+					var params = [];
+					$('.asset-pending tr.item').each(function(index, el) {
+						if($(this).find('.checkSingle').is(':checked')){
+							params.push({
+								name: $(this).find('.name').text(),
+						    	num: $(this).find('.num').text(),
+						    	desc: $(this).find('.desc').text()
+							})
+						}
+						
+					});
+					console.log(JSON.stringify(params))
+					if(params.legth > 0){//有数据选中后提交
+						// $.ajax({
+					 //      type: "POST",
+					 //      url: "/url.do",
+					 //      data: params,
+					 //      dataType : "json",
+					 //      success: function(res){
+					 			// self.renderAsset();
+					 //      }
+						// });
+					}
+				});
+
+				//批量审批
+				$('body').on('click', '.btn-pendingAll', function(event) {
+					event.preventDefault();
+					var params = [];
+					$('.asset-pending tr.item').each(function(index, el) {
+						if($(this).find('.checkSingle').is(':checked')){
+							params.push({
+								name: $(this).find('.name').text(),
+						    	num: $(this).find('.num').text(),
+						    	desc: $(this).find('.desc').text()
+							})
+						}
+						
+					});
+					console.log(JSON.stringify(params))
+					if(params.legth > 0){//有数据选中后提交
+						// $.ajax({
+					 //      type: "POST",
+					 //      url: "/url.do",
+					 //      data: params,
+					 //      dataType : "json",
+					 //      success: function(res){
+					 			// self.renderAsset();
+					 //      }
+						// });
+					}
+				});
+
+
+				//单个删除
+				$('body').on('click', '.btn-delOne', function(event) {
+					event.preventDefault();
+					var params = [];
+					params.push({
+						name: $('.item').eq(self.index).find('.name').text(),
+				    	num: $('.item').eq(self.index).find('.num').text(),
+				    	desc: $('.item').eq(self.index).find('.desc').text()
+					});
+					console.log(JSON.stringify(params))
+					// $.ajax({
+					 //      type: "POST",
+					 //      url: "/url.do",
+					 //      data: params,
+					 //      dataType : "json",
+					 //      success: function(res){
+					 			// self.renderAsset();
+					 //      }
+						// });
+				});
+
+				//单个删除
+				$('body').on('click', '.btn-pendingOne', function(event) {
+					event.preventDefault();
+					var params = [];
+					params.push({
+						name: $('.item').eq(self.index).find('.name').text(),
+				    	num: $('.item').eq(self.index).find('.num').text(),
+				    	desc: $('.item').eq(self.index).find('.desc').text()
+					});
+					console.log(JSON.stringify(params))
+					// $.ajax({
+					 //      type: "POST",
+					 //      url: "/url.do",
+					 //      data: params,
+					 //      dataType : "json",
+					 //      success: function(res){
+					 			// self.renderAsset();
+					 //      }
+						// });
+				});
+
+
 			},
 			logout: function(){
 				var self = this;
@@ -245,5 +411,26 @@
 	</table>
 	</tbody>
 </script>
+
+<script type="text/html" id="modalTpl">
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+			    </div>
+			    <div class="modal-body">
+			     	<%=tips%>
+      			</div>
+				<div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			        <button type="button" class="btn btn-primary <% if(type==='delAll'){%>btn-delAll<%}else if(type == 'pendingAll'){%>btn-pendingAll<%}else if(type == 'delOne'){%>btn-delOne<%}else{%>btn-pendingOne<%}%>" data-dismiss="modal">确定</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+</script>
+
 
 </html>

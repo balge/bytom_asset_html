@@ -87,26 +87,6 @@
 .J_tab .tab-content .asset-survey .survey-list .survey-block.block2 {
   background-color: #EE8262;
 }
-.J_tab .tab-content .asset-create .add-asset,
-.J_tab .tab-content .asset-create .submit-asset {
-  width: 120px;
-  height: 32px;
-  line-height: 32px;
-  text-align: center;
-  float: left;
-  margin-right: 10px;
-  cursor: pointer;
-}
-.J_tab .tab-content .asset-pending .del-asset,
-.J_tab .tab-content .asset-pending .pending-asset {
-  width: 120px;
-  height: 32px;
-  line-height: 32px;
-  text-align: center;
-  float: left;
-  margin-right: 10px;
-  cursor: pointer;
-}
 .J_tab .tab-content .asset-pending .table-box,
 .J_tab .tab-content .asset-create .table-box {
   padding: 20px 0;
@@ -148,50 +128,8 @@
   width: 28%;
 }
 .J_tab .tab-content .asset-table table td a {
-  display: inline-block;
   width: 118px;
-  height: 32px;
-  line-height: 32px;
-  text-decoration: none;
-  margin: 0 5px;
 }
 .J_tab .tab-content .pagination-wrap {
   text-align: center;
-}
-.newData-dialog {
-  display: none;
-  position: fixed;
-  z-index: 20;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-}
-.newData-dialog .mask {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background-color: #000;
-  opacity: 0.4;
-}
-.newData-dialog .dialog {
-  width: 60%;
-  background-color: #fff;
-  position: absolute;
-  padding: 20px 30px;
-  z-index: 20;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -42%);
-}
-.newData-dialog .dialog .close {
-  font-weight: 300;
-  position: relative;
-  top: 8px;
-}
-.newData-dialog .dialog form {
-  margin-top: 20px;
 }

@@ -50,8 +50,12 @@
 							<h3>创建资产</h3>
 							<div class="asset-table">
 								<div class="operate-list clearfix">
-									<div class="add-asset btn-success">新增</div>
-									<div class="submit-asset btn-info">提交</div>
+									<button type="button" class="btn btn-success btn-lg add-asset">
+									&nbsp;&nbsp;&nbsp;&nbsp;新增&nbsp;&nbsp;&nbsp;&nbsp;
+									</button>
+									<button type="button" class="btn btn-info btn-lg submit-asset">
+									&nbsp;&nbsp;&nbsp;&nbsp;提交&nbsp;&nbsp;&nbsp;&nbsp;
+									</button>
 								</div>
 								<div class="table-box">
 									<table class="table table-hover table-bordered">
@@ -72,34 +76,56 @@
 			</div>
 		</div>
 	</div>
-	<div class="newData-dialog">
-		<div class="mask"></div>
-		<div class="dialog">
-			<div class="btn-close close">X</div>
-			<h4>新增数据</h4>
-			<form>
-				<table class="table table-hover table-bordered">
-					<tr>
-						<th>资产名称</th>
-						<td><input type="text" name="" class="form-control" id="name" /></td>
-					</tr>
-					<tr>
-						<th>资产数量</th>
-						<td><input type="number" name="" class="form-control" id="num" /></td>
-					</tr>
-					<tr>
-						<th>资产描述</th>
-						<td><input type="text" name="" class="form-control" id="desc" /></td>
-					</tr>
-					<tr>
-						<td colspan="2" style="text-align:center;">
-							<input type="reset" value="重置" class="btn btn-primary" id="reset" />   
-			                <input type="button" value="添加"  class="btn btn-success" id="add"/>
-			                <input type="button" value="更新"  class="btn btn-info" id="updata"/>
-						</td>
-					</tr>
-				</table>
-			</form>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">新增数据</h4>
+			    </div>
+			    <div class="modal-body">
+			     	<form>
+						<table class="table table-hover table-bordered">
+							<tr>
+								<th>资产名称</th>
+								<td><input type="text" name="" class="form-control" id="name" /></td>
+							</tr>
+							<tr>
+								<th>资产数量</th>
+								<td><input type="number" name="" class="form-control" id="num" /></td>
+							</tr>
+							<tr>
+								<th>资产描述</th>
+								<td><input type="text" name="" class="form-control" id="desc" /></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align:center;">
+									<input type="reset" value="重置" class="btn btn-primary" id="reset" />   
+					                <input data-dismiss="modal" type="button" value="添加"  class="btn btn-success" id="add"/>
+					                <input data-dismiss="modal" type="button" value="更新"  class="btn btn-info" id="updata"/>
+								</td>
+							</tr>
+						</table>
+					</form>
+      			</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+			    </div>
+			    <div class="modal-body">
+			     	
+      			</div>
+				<div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			        <button type="button" class="btn btn-primary btn-sureDel" data-dismiss="modal">确定</button>
+			    </div>
+			</div>
 		</div>
 	</div>
 </body>
@@ -111,6 +137,7 @@
 		var T = {
 			init: function(){
 				var self = this;
+				self.index = 0;//删除资产序列号
 				self.items = [];//增删改的创建列表
 				self.userName = self.getCookie('username');
 				self.loginStatus();
@@ -146,13 +173,15 @@
 					var oName = $('#name').val();
 				    var oNum = $('#num').val();
 				    var oDesc = $('#desc').val();
-				    self.items.push({
-				    	name: oName,
-				    	num: oNum,
-				    	desc: oDesc
-				    })
-				    $('#reset').click();$('.newData-dialog').hide();//清除表单，隐藏窗口
-				    self.handleReRender();//渲染列表
+				    if(oName !== '' && oNum !== '' && oDesc !== ''){
+					    self.items.push({
+					    	name: oName,
+					    	num: oNum,
+					    	desc: oDesc
+					    });
+					    $('#reset').click();
+					    self.handleReRender();//渲染列表
+					}
 				});
 			},
 			// 修改资产
@@ -166,7 +195,7 @@
 					$('#num').val($(this).parents('tr').find('.num').text());
 					$('#desc').val($(this).parents('tr').find('.desc').text());
 					//赋值给显示的表单
-					$('.newData-dialog').show();
+					$('#myModal').modal();
 					self.updateList(index);
 				});
 			},
@@ -179,15 +208,17 @@
 				    var oNum = $('#num').val();
 				    var oDesc = $('#desc').val();
 				    //修改items列表
-				    var items = self.items;
-					items.splice(index,1,{
-						name: oName,
-				    	num: oNum,
-				    	desc: oDesc
-					});//删除返回新元素
-					self.items = items;
-					$('#reset').click();$('.newData-dialog').hide();//清除表单，隐藏窗口
-					self.handleReRender();//渲染列表
+				    if(oName !== '' && oNum !== '' && oDesc !== ''){
+					    var items = self.items;
+						items.splice(index,1,{
+							name: oName,
+					    	num: oNum,
+					    	desc: oDesc
+						});//删除返回新元素
+						self.items = items;
+						$('#reset').click();
+						self.handleReRender();//渲染列表
+					}
 				});
 			},
 			// 删除资产
@@ -195,12 +226,19 @@
 				var self = this;
 				$('.asset-block').on('click', '.btn-del', function(event) {
 					event.preventDefault();
-					var index = parseInt($(this).parents('tr').attr('data-id'));
+					self.index = parseInt($(this).parents('.item').attr('data-id'));
+					var index = self.index + 1;
+					$('#delModal').find('.modal-body').html('确定删除第' + index + '条资产？').end().modal();
+				});
+
+				$('body').on('click', '.btn-sureDel', function(event) {
+					event.preventDefault();
 					var items = self.items;
-					items.splice(index,1);//删除返回新元素
+					items.splice(self.index,1);//删除返回新元素
 					self.items = items;
 					self.handleReRender();//渲染列表
 				});
+
 			},
 
 			checkAl: function(){
@@ -224,11 +262,7 @@
 				var self = this;
 				$('.add-asset').on('click', function(event) {
 					event.preventDefault();
-					$('.newData-dialog').show();
-				});
-				$('.btn-close').on('click', function(event) {
-					event.preventDefault();
-					$('.newData-dialog').hide();
+					$('#myModal').modal();
 				});
 			},
 			submitList: function(){
