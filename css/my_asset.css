@@ -1,0 +1,197 @@
+.J_tab {
+  background-color: #fff;
+  padding: 20px 20px 20px 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 2px;
+  border: 0;
+  margin-top: 30px;
+}
+.J_tab .tab-nav {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+}
+.J_tab .tab-nav li {
+  float: left;
+  display: block;
+  text-align: center;
+  color: #373d41;
+  font-size: 18px;
+  line-height: 50px;
+  height: 50px;
+  width: 20%;
+  cursor: pointer;
+  border-right: 1px solid #e5e5e5;
+}
+.J_tab .tab-nav li:nth-last-child(1) {
+  border-right: 0;
+}
+.J_tab .tab-nav li a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  padding: 0;
+  text-decoration: none;
+}
+.J_tab .tab-nav li:hover {
+  color: #3f51b5;
+}
+.J_tab .tab-nav li.active {
+  background-color: #3f51b5;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .J_tab .tab-nav li {
+    font-size: 14px;
+  }
+}
+.J_tab .tab-content {
+  padding-top: 30px;
+}
+.J_tab .tab-content h3 {
+  margin-bottom: 20px;
+}
+.J_tab .tab-content .asset-survey .survey-list {
+  width: 65%;
+}
+.J_tab .tab-content .asset-survey .survey-list .survey-block {
+  padding: 20px;
+  height: 200px;
+  color: #fff;
+  font-size: 18px;
+  position: relative;
+  margin-bottom: 30px;
+}
+.J_tab .tab-content .asset-survey .survey-list .survey-block span {
+  display: block;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  text-align: center;
+  font-size: 32px;
+  line-height: 32px;
+  height: 32px;
+  top: 50%;
+  margin-top: -5px;
+}
+.J_tab .tab-content .asset-survey .survey-list .survey-block.block0 {
+  background-color: #FA8072;
+}
+.J_tab .tab-content .asset-survey .survey-list .survey-block.block1 {
+  background-color: #EE7600;
+}
+.J_tab .tab-content .asset-survey .survey-list .survey-block.block2 {
+  background-color: #EE8262;
+}
+.J_tab .tab-content .asset-create .add-asset,
+.J_tab .tab-content .asset-create .submit-asset {
+  width: 120px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  float: left;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.J_tab .tab-content .asset-pending .del-asset,
+.J_tab .tab-content .asset-pending .pending-asset {
+  width: 120px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  float: left;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.J_tab .tab-content .asset-pending .table-box,
+.J_tab .tab-content .asset-create .table-box {
+  padding: 20px 0;
+}
+.J_tab .tab-content .asset-pending .table-box table td,
+.J_tab .tab-content .asset-create .table-box table td {
+  width: 18%;
+}
+.J_tab .tab-content .asset-pending .table-box table td:nth-child(1),
+.J_tab .tab-content .asset-create .table-box table td:nth-child(1) {
+  width: 10%;
+}
+.J_tab .tab-content .asset-pending .table-box table td:nth-last-child(1),
+.J_tab .tab-content .asset-create .table-box table td:nth-last-child(1) {
+  width: 18%;
+}
+.J_tab .tab-content .asset-pending .table-box table .checkAll,
+.J_tab .tab-content .asset-create .table-box table .checkAll {
+  position: relative;
+  vertical-align: top;
+  top: 8px;
+  margin-right: 5px;
+}
+.J_tab .tab-content .asset-table table {
+  width: 100%;
+}
+.J_tab .tab-content .asset-table table th {
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+}
+.J_tab .tab-content .asset-table table td {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 18%;
+}
+.J_tab .tab-content .asset-table table td:nth-last-child(1) {
+  width: 28%;
+}
+.J_tab .tab-content .asset-table table td a {
+  display: inline-block;
+  width: 118px;
+  height: 32px;
+  line-height: 32px;
+  text-decoration: none;
+  margin: 0 5px;
+}
+.J_tab .tab-content .pagination-wrap {
+  text-align: center;
+}
+.newData-dialog {
+  display: none;
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.newData-dialog .mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000;
+  opacity: 0.4;
+}
+.newData-dialog .dialog {
+  width: 60%;
+  background-color: #fff;
+  position: absolute;
+  padding: 20px 30px;
+  z-index: 20;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -42%);
+}
+.newData-dialog .dialog .close {
+  font-weight: 300;
+  position: relative;
+  top: 8px;
+}
+.newData-dialog .dialog form {
+  margin-top: 20px;
+}

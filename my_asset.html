@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta content="巴比特始建于2011年，是国内最早的区块链（blockchain）资讯社区门户，为区块链创业者、投资者提供信息、交流与投融资服务。开放是我们的广度，中立是我们的态度，敏锐是我们的深度，欢迎一切区块链技术的探讨争鸣。目前有200多位区块链意见领袖、研究者入驻平台。如果您是我们的同类，欢迎加入我们！" name="description">
+	<meta content="比特币,比特币资讯,区块链,区块链资讯,数字货币,数字货币资讯,虚拟货币,虚拟货币资讯" name="keywords">
+	<title>个人资产-资产概况</title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="./css/header.css">
+	<link rel="stylesheet" href="./css/my_asset.css">
+	<script>
+		window.DEBUGGER = true;//全局切换本地线上状态
+	</script>
+</head>
+<body>
+	<div class="navbar-fixed-container">
+		<div class="navbar navbar-fixed-top affix-top" data-offset-top="1" data-spy="affix">
+			<nav role="navigation">
+				<div class="container-fluid">
+					<div class="nav navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Expand and Collapse Menu">
+  	                        <span class="icon-bar"></span>
+  	                        <span class="icon-bar"></span>
+  	                        <span class="icon-bar"></span>
+  	                    </button>
+  	                    <a class="navbar-brand" href="index.html">Bytom</a>
+					</div>
+					<div class="navbar-collapse collapse"></div>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="com-sm-12 J_tab">
+				<ul class="tab-nav clearfix">
+					<li class="active"><a href="my_asset.html">资产概况</a></li>
+					<li><a href="published_asset.html">已发布资产</a></li>
+					<li><a href="purchased_asset.html">已购买资产</a></li>
+					<li><a href="create_asset.html">创建资产</a></li>
+					<li><a href="pending_asset.html">待审核资产</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pannel asset-survey clearfix">
+						<div class="asset-block">
+							<h3>资产概况</h3>
+							<div class="survey-list clearfix">
+								
+							</div>
+						</div>
+						<div class="asset-record">
+							<h3>资产记录</h3>
+							<div class="asset-table">
+							</div>
+							<div class="pagination-wrap">
+							  <ul class="pagination"></ul>
+							</div>
+						</div>
+					</div><!-- 概况 -->
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/jqPaginator.js"></script>
+<script>
+	$(function(){
+		var T = {
+			init: function(){
+				var self = this;
+				self.userName = self.getCookie('username');
+				self.pageSize =10;
+				self.loginStatus();
+				self.renderAsset();
+				self.renderSurveyBlock();
+				self.logout();
+			},
+			loginStatus: function(){
+				var self = this;
+				//ajax请求登录返回loginStatus,保存cookie
+				self.setCookie('username', 'wuchengba', 1);//模拟登录
+				if(self.userName){
+					var loginStatus = true;
+				}else{
+					var loginStatus = false;
+					window.location.href = 'login.html';
+					return false;
+				}
+				var navBarHtml = template($('#navTpl').html(), {
+			        loginStatus: loginStatus//已经登录
+			    });
+			    $('.navbar-collapse').html(navBarHtml);
+			},
+			logout: function(){
+				var self = this;
+				$('.logout').on('click', function(event) {
+					event.preventDefault();
+					self.setCookie('username', '', -1);
+					window.location.href = 'login.html';
+				});
+			},
+			renderAsset: function(pageNum,isReRender){
+				var self = this;
+				//ajax请求可购买资产返回data
+				// $.ajax({
+				// 	url: '',
+				// 	type: 'GET',
+				// 	dataType: 'json',
+				// 	data: {
+				// 		pageNum: pageNum || 1,
+				// 		pageSize: self.pageSize
+				// 	}
+				// 	success: function(){
+
+				// 	},
+				// 	error: function(){
+
+				// 	}
+				// })
+				var data = {
+					"code": 200,
+					"msg": '请求成功',
+					"pageNum": 1,
+					"pageSize": 10,
+					data: [{
+						"name": "btm",
+						"owner": "bytom",
+						"time": "2018/06/03",
+						"price": 1000,
+						"detailUrl": "http://www.baidu.com",//详情地址
+						"orderUrl": "http://www.google.com",//购买地址
+						"id": 100//产品id
+					},{
+						"name": "btm2",
+						"owner": "bytom",
+						"time": "2018/06/03",
+						"price": 1000,
+						"detailUrl": "http://www.baidu.com",//详情地址
+						"orderUrl": "http://www.google.com",//购买地址
+						"id": 100//产品id
+					},{
+						"name": "btm3",
+						"owner": "bytom",
+						"time": "2018/06/03",
+						"price": 1000,
+						"detailUrl": "http://www.baidu.com",//详情地址
+						"orderUrl": "http://www.google.com",//购买地址
+						"id": 100//产品id
+					},{
+						"name": "btm4",
+						"owner": "bytom",
+						"time": "2018/06/03",
+						"price": 1000,
+						"detailUrl": "http://www.baidu.com",//详情地址
+						"orderUrl": "http://www.google.com",//购买地址
+						"id": 100//产品id
+					},{
+						"name": "btm5",
+						"owner": "bytom",
+						"time": "2018/06/03",
+						"price": 1000,
+						"detailUrl": "http://www.baidu.com",//详情地址
+						"orderUrl": "http://www.google.com",//购买地址
+						"id": 100//产品id
+					}]
+				};
+
+				var assetHtml = template($('#assetTpl').html(), {
+					items: data.data
+			    });
+			    $('.asset-table').html(assetHtml);
+			    if(!isReRender || isReRender != true){
+					self.paginator(data.data.length,1);
+				}
+			},
+			renderSurveyBlock: function(){
+				var self = this;
+				//ajax请求可购买资产返回data
+				// $.ajax({
+				// 	url: '',
+				// 	type: 'GET',
+				// 	dataType: 'json',
+				// 	data: {
+				// 	}
+				// 	success: function(){
+
+				// 	},
+				// 	error: function(){
+
+				// 	}
+				// })
+				var data = {
+					"code": 200,
+					"msg": '请求成功',
+					"data": {
+						"release": 100,
+						"owner": 88,
+						"examine": 20
+					}
+				};
+
+				var surveyHtml = template($('#surveyTpl').html(), {
+					items: data.data
+			    });
+			    $('.survey-list').html(surveyHtml);
+			},
+			paginator: function(total,current){
+				var self = this;
+				$(".pagination-wrap .pagination").jqPaginator({
+		            totalPages: total,
+		            visiblePages: self.pageSize,
+		            currentPage: current,
+		            first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
+		            prev: '<li class="prev"><a href="javascript:void(0);">前一页<\/a><\/li>',
+		            next: '<li class="next"><a href="javascript:void(0);">下一页<\/a><\/li>',
+		            last: '<li class="last"><a href="javascript:void(0);">尾页<\/a><\/li>',
+		            page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
+		            onPageChange: function (n) {
+		            	self.renderAsset(n, true);//重新渲染，true避免pagation重新渲染
+		            }
+		        });
+			},
+			setCookie: function(cname, cvalue, exdays) {
+				var self = this;
+			    var d = new Date();
+			    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+			    var expires = "expires="+d.toUTCString();
+			    document.cookie = cname + "=" + cvalue + "; " + expires;
+			},
+			getCookie: function(cname) {
+				var self = this;
+			    var name = cname + "=";
+			    var ca = document.cookie.split(';');
+			    for(var i=0; i<ca.length; i++) {
+			        var c = ca[i];
+			        while (c.charAt(0)==' ') c = c.substring(1);
+			        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+			    }
+			    return "";
+			}
+		};
+		T.init();
+	})
+
+</script>
+
+<script id="navTpl" type="text/html">
+    <ul class="nav navbar-nav navbar-left">
+		<li>
+        	<a href="index.html">首页</a>
+        </li>
+        <li>
+            <a class="active" href="my_asset.html">个人资产</a>
+        </li>
+        <li>
+            <a href="asset_center.html">资产中心</a>
+        </li>
+        <% if(loginStatus === true){ %>
+        <li>
+        	<a href="user_center.html">个人中心</a>
+        </li>
+        <% } %>
+	</ul>
+	<ul class="nav navbar-nav navbar-right">
+        <% if(loginStatus === true){ %>
+        <li>
+            <a class="logout" href="javascript:;">
+                <img src="http://www.gravatar.com/avatar/2b17029a858d6acb7702603d1c139799?s=18&amp;r=g&amp;d=identicon">
+                退出
+            </a>
+        </li>
+        <% }else{ %>
+		<li><a href="login.html">登陆</a></li>
+        <li><a href="register.html">注册</a></li>
+        <% } %>
+	</ul>
+</script>
+
+<script id="surveyTpl" type="text/html">
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="survey-block block0">
+				个人发布的资产:
+				<span><%=items.release%></span>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="survey-block block1">
+				个人购买的资产:
+				<span><%=items.owner%></span>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="survey-block block2">
+				待审核的资产:
+				<span><%=items.examine%></span>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="assetTpl" type="text/html">
+	<table class="table table-hover table-bordered">
+		<tr>
+			<th>资产名称</th>
+			<th>发行机构/人</th>
+			<th>发布时间</th>
+			<th>操作</th>
+		</tr>
+		<%for(var i in items){%> 
+		<tr data-id="<%= items[i].id%>">
+			<td><%= items[i].name%></td>
+			<td><%= items[i].owner%></td>
+			<td><%= items[i].time%></td>
+			<td>
+				<a href="<%= items[i].orderUrl%>" class="btn-warning" target="_blank">购买</a>
+				<a href="<%= items[i].detailUrl%>" class="btn-info" target="_blank">详情</a>
+			</td>
+		</tr>
+		<%}%>
+	</table>
+</script>
+
+</html>

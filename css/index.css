@@ -1,0 +1,41 @@
+.asset-box {
+  background-color: #fff;
+  padding: 20px 20px 0 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 2px;
+  border: 0;
+  margin-top: 30px;
+}
+.asset-box .asset-table {
+  padding: 20px 0;
+}
+.asset-box .asset-table table {
+  width: 100%;
+}
+.asset-box .asset-table table th {
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+}
+.asset-box .asset-table table td {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 18%;
+}
+.asset-box .asset-table table td:nth-last-child(1) {
+  width: 28%;
+}
+.asset-box .asset-table table td a {
+  display: inline-block;
+  width: 118px;
+  height: 32px;
+  line-height: 32px;
+  text-decoration: none;
+  margin: 0 5px;
+}
+.asset-box .pagination-wrap {
+  text-align: center;
+}
