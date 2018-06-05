@@ -29,12 +29,7 @@
   width: 28%;
 }
 .asset-box .asset-table table td a {
-  display: inline-block;
   width: 118px;
-  height: 32px;
-  line-height: 32px;
-  text-decoration: none;
-  margin: 0 5px;
 }
 .asset-box .pagination-wrap {
   text-align: center;
