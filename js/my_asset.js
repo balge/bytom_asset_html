@@ -6,6 +6,7 @@ $(function(){
 			self.pageSize =10;
 			self.loginStatus();
 			self.renderAsset();
+			self.renderSurveyBlock();
 			self.logout();
 		},
 		loginStatus: function(){
@@ -15,18 +16,22 @@ $(function(){
 			if(self.userName){
 				var loginStatus = true;
 			}else{
-				var loginStatus = false;	
+				var loginStatus = false;
+				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
+				return false;
 			}
 			var navBarHtml = template($('#navTpl').html(), {
 		        loginStatus: loginStatus//已经登录
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
-
-			var welcomeHtml = template($('#welTpl').html(), {
-		        loginStatus: loginStatus,//已经登录
-		        username: self.userName
-		    });
-		    $('.welcome-txt').html(welcomeHtml);
+		},
+		logout: function(){
+			var self = this;
+			$('.logout').on('click', function(event) {
+				event.preventDefault();
+				self.setCookie('username', '', -1);
+				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
+			});
 		},
 		renderAsset: function(pageNum,isReRender){
 			var self = this;
@@ -102,6 +107,37 @@ $(function(){
 				self.paginator(data.data.length,1);
 			}
 		},
+		renderSurveyBlock: function(){
+			var self = this;
+			//ajax请求可购买资产返回data
+			// $.ajax({
+			// 	url: '',
+			// 	type: 'GET',
+			// 	dataType: 'json',
+			// 	data: {
+			// 	}
+			// 	success: function(){
+
+			// 	},
+			// 	error: function(){
+
+			// 	}
+			// })
+			var data = {
+				"code": 200,
+				"msg": '请求成功',
+				"data": {
+					"release": 100,
+					"owner": 88,
+					"examine": 20
+				}
+			};
+
+			var surveyHtml = template($('#surveyTpl').html(), {
+				items: data.data
+		    });
+		    $('.survey-list').html(surveyHtml);
+		},
 		paginator: function(total,current){
 			var self = this;
 			$(".pagination-wrap .pagination").jqPaginator({
@@ -117,14 +153,6 @@ $(function(){
 	            	self.renderAsset(n, true);//重新渲染，true避免pagation重新渲染
 	            }
 	        });
-		},
-		logout: function(){
-			var self = this;
-			$('.logout').on('click', function(event) {
-				event.preventDefault();
-				self.setCookie('username', '', -1);
-				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
-			});
 		},
 		setCookie: function(cname, cvalue, exdays) {
 			var self = this;
@@ -146,4 +174,4 @@ $(function(){
 		}
 	};
 	T.init();
-	})
+})

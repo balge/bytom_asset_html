@@ -15,18 +15,22 @@ $(function(){
 			if(self.userName){
 				var loginStatus = true;
 			}else{
-				var loginStatus = false;	
+				var loginStatus = false;
+				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
+				return false;
 			}
 			var navBarHtml = template($('#navTpl').html(), {
 		        loginStatus: loginStatus//已经登录
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
-
-			var welcomeHtml = template($('#welTpl').html(), {
-		        loginStatus: loginStatus,//已经登录
-		        username: self.userName
-		    });
-		    $('.welcome-txt').html(welcomeHtml);
+		},
+		logout: function(){
+			var self = this;
+			$('.logout').on('click', function(event) {
+				event.preventDefault();
+				self.setCookie('username', '', -1);
+				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
+			});
 		},
 		renderAsset: function(pageNum,isReRender){
 			var self = this;
@@ -56,6 +60,8 @@ $(function(){
 					"owner": "bytom",
 					"time": "2018/06/03",
 					"price": 1000,
+					"status": 0, //0->未购买，1->已购买
+					"buyedNum": 10,
 					"detailUrl": "http://www.baidu.com",//详情地址
 					"orderUrl": "http://www.google.com",//购买地址
 					"id": 100//产品id
@@ -64,6 +70,8 @@ $(function(){
 					"owner": "bytom",
 					"time": "2018/06/03",
 					"price": 1000,
+					"status": 1,
+					"buyedNum": 10,
 					"detailUrl": "http://www.baidu.com",//详情地址
 					"orderUrl": "http://www.google.com",//购买地址
 					"id": 100//产品id
@@ -72,6 +80,8 @@ $(function(){
 					"owner": "bytom",
 					"time": "2018/06/03",
 					"price": 1000,
+					"status": 0,
+					"buyedNum": 10,
 					"detailUrl": "http://www.baidu.com",//详情地址
 					"orderUrl": "http://www.google.com",//购买地址
 					"id": 100//产品id
@@ -80,6 +90,8 @@ $(function(){
 					"owner": "bytom",
 					"time": "2018/06/03",
 					"price": 1000,
+					"status": 0,
+					"buyedNum": 10,
 					"detailUrl": "http://www.baidu.com",//详情地址
 					"orderUrl": "http://www.google.com",//购买地址
 					"id": 100//产品id
@@ -87,6 +99,8 @@ $(function(){
 					"name": "btm5",
 					"owner": "bytom",
 					"time": "2018/06/03",
+					"status": 0,
+					"buyedNum": 10,
 					"price": 1000,
 					"detailUrl": "http://www.baidu.com",//详情地址
 					"orderUrl": "http://www.google.com",//购买地址
@@ -118,14 +132,6 @@ $(function(){
 	            }
 	        });
 		},
-		logout: function(){
-			var self = this;
-			$('.logout').on('click', function(event) {
-				event.preventDefault();
-				self.setCookie('username', '', -1);
-				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
-			});
-		},
 		setCookie: function(cname, cvalue, exdays) {
 			var self = this;
 		    var d = new Date();
@@ -146,4 +152,4 @@ $(function(){
 		}
 	};
 	T.init();
-	})
+})

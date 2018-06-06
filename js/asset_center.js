@@ -15,18 +15,13 @@ $(function(){
 			if(self.userName){
 				var loginStatus = true;
 			}else{
-				var loginStatus = false;	
+				var loginStatus = false;
+				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);	
 			}
 			var navBarHtml = template($('#navTpl').html(), {
 		        loginStatus: loginStatus//已经登录
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
-
-			var welcomeHtml = template($('#welTpl').html(), {
-		        loginStatus: loginStatus,//已经登录
-		        username: self.userName
-		    });
-		    $('.welcome-txt').html(welcomeHtml);
 		},
 		renderAsset: function(pageNum,isReRender){
 			var self = this;
@@ -146,4 +141,4 @@ $(function(){
 		}
 	};
 	T.init();
-	})
+})

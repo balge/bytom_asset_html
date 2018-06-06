@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="巴比特始建于2011年，是国内最早的区块链（blockchain）资讯社区门户，为区块链创业者、投资者提供信息、交流与投融资服务。开放是我们的广度，中立是我们的态度，敏锐是我们的深度，欢迎一切区块链技术的探讨争鸣。目前有200多位区块链意见领袖、研究者入驻平台。如果您是我们的同类，欢迎加入我们！" name="description">
 	<meta content="比特币,比特币资讯,区块链,区块链资讯,数字货币,数字货币资讯,虚拟货币,虚拟货币资讯" name="keywords">
-	<title>登录</title>
+	<title>注册</title>
 	<link rel="icon" href="./images/favicon.ico" />
 	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
@@ -16,24 +16,32 @@
 </head>
 <body>
 	<div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-title">
-                <h1 class="text-center">登录</h1>
-            </div>
+        <div class="modal-content">     
+			<div class="modal-title">
+				<h1 class="text-center">注册</h1>
+			</div>
             <div class="modal-body">
-                <form id="loginForm">
-	                <div class="form-group">
-                        <label for="email">邮箱</label>
-                        <input id="email" name="email" class="form-control" type="text" placeholder="例如:123@123.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">密码</label>
-                        <input id="password" name="password" class="form-control" type="password" placeholder="至少6位字母或数字">
-                    </div>
-                    <div class="text-right">
-                        <button style="width:100px;" class="btn btn-primary btn-submit" type="submit">登录</button>
-                    </div>
-                    <a href="register.html">还没有账号？点我注册</a>
+                <form id="registerForm">
+					<div class="form-group">
+						<label for="email">邮箱</label>
+						<input id="email" name="email" class="form-control" type="text" placeholder="例如:123@123.com">
+					</div>
+					<div class="form-group">
+						<label for="username">用户名</label>
+						<input id="username" name="username" class="form-control" type="text" placeholder="5-15位字母或数字">
+					</div>
+					<div class="form-group">
+						<label for="password">密码</label>
+						<input id="password" name="password" class="form-control" type="password" placeholder="至少6位字母或数字">
+					</div>
+					<div class="form-group">
+						<label for="confirmPassword">再次输入密码</label>
+						<input id="confirmPassword" name="confirmPassword" class="form-control" type="password" placeholder="至少6位字母或数字">
+					</div>
+					<div class="text-right">
+					  <button class="btn btn-primary btn-submit" type="submit">注册</button>
+					</div>
+					<a href="login.html">已有账号？点我登录</a>
                 </form>
             </div>
         </div>
@@ -42,5 +50,5 @@
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/validate.js"></script>
-<script src="./js/login.js"></script>
+<script src="./js/register.js"></script>
 </html>

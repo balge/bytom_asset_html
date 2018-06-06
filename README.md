@@ -128,6 +128,87 @@
 }
 ```
 
+#### 审批资产/批量审批
+
+- type: POST 
+- 参数同创建资产
+
+
+#### 删除资产/批量删除
+
+- type: POST
+- 参数同创建资产
+
+
+## 个人中心
+
+
+## 登录
+
+- type: POST
+- params(form.serialize()格式): email=wucb%408btc.com&password=123456
+
+```
+{
+	code: 200,
+	msg: '登录成功',
+	data: {
+		email: '1111@1111.com',
+		username: 'balge'
+	}
+}
+
+{
+	code: -1或者-2或者-3...,
+	msg: '登录失败，邮箱不存在 -1，密码错误 -2 等问题，把这些返回出来'
+}
+```
+
+
+## 注册
+
+#### 提交注册表单
+- type: POST
+- params(form.serialize()格式): email=wucb%408btc.com&username=weqr21&password=123456&confirmPassword=123456
+
+```
+{
+	code: 200,
+	msg: '注册成功',
+	data: {
+		email: '1111@1111.com',
+		username: 'balge',
+		password: '123456'
+	}
+}
+
+{
+	code: -1,
+	msg: '注册失败的情况，邮箱占用单独处理'
+}
+
+```
+
+
+#### 邮箱是否被占用
+
+
+- type: POST
+- params       email: 33333@333.com
+
+```
+	//必须返回这个格式
+	{
+		"valid":false
+	} //表示不合法，验证不通过
+	{
+		"valid":true
+	} //表示合法，验证通过
+```
+
+
+
+
 
 
 
