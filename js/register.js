@@ -40,17 +40,6 @@ $(function(){
 		                    },
 		                    emailAddress: {
 		                        message: '请输入正确格式的邮箱地址'
-		                    },
-		                    remote: {
-		                    	url: 'http://www.baoidu.com',
-		                    	data: {
-	                    			email: function() {
-	                            		return $('#email').val()
-	                            	}
-		                        },
-		                    	message: '邮箱已被注册',
-		                    	delay: 2000,
-		                    	type: 'POST'
 		                    }
 		                }
 		            },
@@ -96,19 +85,43 @@ $(function(){
 			}).on('success.form.bv', function(e) {
 
 				e.preventDefault();
-				var $form = $(e.target);
-				console.log($form.serialize())
+				var params = {
+					username: $('#username').val(),
+					email: $('#email').val(),
+					password: $('#password').val(),
+					confirmPassword: $('#confirmPassword').val()
+				}
 				$.ajax({
-					url: 'http://www.baoidu2.com',
+					url: 'http://192.168.199.62:5000/api/register',
 					type: 'POST',
 					dataType: 'json',
-					data: $form.serialize(),
-					crossDomain: true,
+					contentType: 'application/json',
+					data: JSON.stringify(params),
+					// crossDomain: true,
+					// xhrFields: {
+					// 	withCredentials: true
+					// },
 					success: function(res){
-						
+						if(res.code == 200){
+							//注册成功，跳转登录页面
+							window.location.href = 'login.html';
+						}else if(res.code == -1){
+							//邮箱已经注册
+							var alertHtml = template($('#alertTpl').html(), {
+						        text: '邮箱已经注册'//已经登录
+						    });
+						    $('.dialog-box').html(alertHtml).addClass('show');
+						    $('.alert.alert-danger').alert();
+						    setTimeout(function(){
+						    	$('.dialog-box').removeClass('show');
+						    	$('.alert.alert-danger').alert('close');
+						    },3000);
+						}else{
+
+						}
 					},
 					error: function(){
-
+						//失败情况处理
 					}
 				});
 				

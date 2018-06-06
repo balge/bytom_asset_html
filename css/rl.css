@@ -1,0 +1,19 @@
+.dialog-box {
+  height: 60px;
+  position: fixed;
+  right: 0;
+  transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  top: 0;
+  z-index: 19999;
+  transition: all 0.3s;
+}
+.dialog-box h4 {
+  margin: 0;
+  white-space: nowrap;
+}
+.dialog-box.show {
+  right: 0;
+  transform: translateX(0);
+  -webkit-transform: translateX(0);
+}

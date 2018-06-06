@@ -4,7 +4,13 @@ $(function(){
 			var self = this;
 			self.index = 0;//删除资产序列号
 			self.items = [];//增删改的创建列表
+			var localItems = self.getItem('items');
+			if(localItems){
+				self.items = self.items.concat(JSON.parse(localItems));
+				self.handleReRender();
+			}
 			self.userName = self.getCookie('username');
+			self.email = self.getCookie('email');
 			self.loginStatus();
 			self.logout();
 			self.dialogToggle();
@@ -17,7 +23,7 @@ $(function(){
 		loginStatus: function(){
 			var self = this;
 			//ajax请求登录返回loginStatus,保存cookie
-			self.setCookie('username', 'wuchengba', 1);//模拟登录
+			// self.setCookie('username', 'wuchengba', 1);//模拟登录
 			if(self.userName){
 				var loginStatus = true;
 			}else{
@@ -46,6 +52,7 @@ $(function(){
 				    });
 				    $('#reset').click();
 				    self.handleReRender();//渲染列表
+				    self.setItem('items', JSON.stringify(self.items));
 				}
 			});
 		},
@@ -83,6 +90,7 @@ $(function(){
 					self.items = items;
 					$('#reset').click();
 					self.handleReRender();//渲染列表
+				    self.setItem('items', JSON.stringify(self.items));
 				}
 			});
 		},
@@ -102,6 +110,7 @@ $(function(){
 				items.splice(self.index,1);//删除返回新元素
 				self.items = items;
 				self.handleReRender();//渲染列表
+				self.setItem('items', JSON.stringify(self.items));
 			});
 
 		},
@@ -132,38 +141,97 @@ $(function(){
 		},
 		submitList: function(){
 			var self = this;
-			$('.submit-asset').on('click', function(event) {
-				event.preventDefault();
-				var params = [];
-				$('.asset-create tr.item').each(function(index, el) {
-					if($(this).find('.checkSingle').is(':checked')){
-						params.push({
-							name: $(this).find('.name').text(),
-					    	num: $(this).find('.num').text(),
-					    	desc: $(this).find('.desc').text()
-						})
-					}
+			// $('.submit-asset').on('click', function(event) {
+			// 	event.preventDefault();
+			// 	var params = [];
+			// 	$('.asset-create tr.item').each(function(index, el) {
+			// 		if($(this).find('.checkSingle').is(':checked')){
+			// 			params.push({
+			// 				name: $(this).find('.name').text(),
+			// 		    	num: $(this).find('.num').text(),
+			// 		    	desc: $(this).find('.desc').text()
+			// 			})
+			// 		}
 					
-				});
-				console.log(JSON.stringify(params))
-				if(params.legth > 0){//有数据选中后提交
-					// $.ajax({
-				 //      type: "POST",
-				 //      url: "/url.do",
-				 //      data: params,
-				 //      dataType : "json",
-				 //      success: function(res){
-
-				 //      }
-					// });
-				}
+			// 	});
+			// 	console.log(JSON.stringify(params))
+			// 	if(params.length > 0){//有数据选中后提交
+			// 		$.ajax({
+			// 	       	url: 'http://192.168.199.62:5000/api/assets_define',
+			// 			type: 'POST',
+			// 			dataType: 'json',
+			// 			contentType: 'application/json',
+			// 			data: JSON.stringify(params),
+			// 			// xhrFields: {
+			// 			// 	withCredentials: true
+			// 			// },
+			// 	        success: function(res){
+			// 	      		console.log(res)
+			// 	        }
+			// 		});
+			// 	}
+			// });
+			$('.asset-block').on('click', '.btn-submit', function(event) {
+				event.preventDefault();
+				self.index = parseInt($(this).parents('.item').attr('data-id'));
+				var index = self.index + 1;
+				$('#postModal').find('.modal-body').html('确定提交第' + index + '条资产？').end().modal();
 			});
+			$('body').on('click', '.btn-surePost', function(event) {
+				event.preventDefault();
+				var params = {
+					name: $('tr.item').eq(self.index).find('.name').text(),
+			    	num: $('tr.item').eq(self.index).find('.num').text(),
+			    	desc: $('tr.item').eq(self.index).find('.desc').text(),
+			    	email: self.getCookie('email')
+				};
+				$.ajax({
+			       	url: 'http://192.168.199.62:5000/api/assets_define',
+					type: 'POST',
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(params),
+					// xhrFields: {
+					// 	withCredentials: true
+					// },
+			        success: function(res){
+			      		if(res.code == 200){
+			      			self.alertDialog('提交成功')
+			      			var items = self.items;
+							items.splice(self.index,1);//删除返回新元素
+							self.items = items;
+							self.handleReRender();//渲染列表
+							self.setItem('items', JSON.stringify(self.items));
+			      		}else{
+			      			self.alertDialog('提交失败，请重试')
+			      		}
+			        },
+			        error: function(){
+			        	self.alertDialog('提交失败，请重试');
+			        }
+				});
+			});
+		},
+		alertDialog: function(text){
+			var self = this;
+			var alertHtml = template($('#alertTpl').html(), {
+		        text: text
+		    });
+		    $('.dialog-box').html(alertHtml).addClass('show');
+		    $('.alert.alert-danger').alert();
+		    setTimeout(function(){
+		    	$('.dialog-box').removeClass('show');
+		    },2000);
+		    setTimeout(function(){
+		    	$('.alert.alert-danger').alert('close');
+		    },2300);
 		},
 		logout: function(){
 			var self = this;
 			$('.logout').on('click', function(event) {
 				event.preventDefault();
 				self.setCookie('username', '', -1);
+				self.setCookie('email', '', -1);
 				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 			});
 		},
@@ -184,6 +252,19 @@ $(function(){
 		        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
 		    }
 		    return "";
+		},
+		getItem: function (key) {
+			var self = this;
+			var value = localStorage.getItem(key);
+			if (value) {
+				return value;
+			}else{
+				return ""
+			}
+		},
+		setItem: function (key, value) {
+			var self = this;
+			localStorage.setItem(key, value);
 		}
 	};
 	T.init();

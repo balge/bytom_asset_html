@@ -11,7 +11,7 @@ $(function(){
 		loginStatus: function(){
 			var self = this;
 			//ajax请求登录返回loginStatus,保存cookie
-			self.setCookie('username', 'wuchengba', 1);//模拟登录
+			// self.setCookie('username', 'wuchengba', 1);//模拟登录
 			if(self.userName){
 				var loginStatus = true;
 			}else{
@@ -29,6 +29,7 @@ $(function(){
 			$('.logout').on('click', function(event) {
 				event.preventDefault();
 				self.setCookie('username', '', -1);
+				self.setCookie('email', '', -1);
 				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 			});
 		},

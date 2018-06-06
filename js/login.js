@@ -35,24 +35,62 @@ $(function(){
 			}).on('success.form.bv', function(e) {
 
 				e.preventDefault();
-				var $form = $(e.target);
-				console.log($form.serialize())
+				var params = {
+					email: $('#email').val(),
+					password: $('#password').val()
+				}
 				$.ajax({
-					url: 'url',
+					url: 'http://192.168.199.62:5000/api/login',
 					type: 'POST',
 					dataType: 'json',
-					data: $form.serialize(),
+					contentType: 'application/json',
+					data: JSON.stringify(params),
+					// crossDomain: true,
+					// xhrFields: {
+					// 	withCredentials: true
+					// },
 					success: function(res){
-						// 成功之后，跳转登录页面
-						// 失败，比如密码错误/账号不存在
-						
+						console.log(res)
+						if(res.code == 200) {
+							if(res.data){
+								self.setCookie('username', res.data.username, 5);
+								self.setCookie('email', res.data.email, 5);
+							}
+							//有回调地址
+							var redirect_uri = self.getQueryString('redirect_uri');
+							if(redirect_uri) {
+								window.location.href = decodeURIComponent(redirect_uri);
+							}else{
+								window.location.href = 'index.html';
+							}
+
+						} else if(res.code == -1){
+							self.alertDialog('账号或密码错误');
+						} else if(res.code == -2){
+							self.alertDialog('请验证登录邮箱');
+						}
 					},
 					error: function(){
-
+						//失败情况处理
+						self.alertDialog('服务器异常');
 					}
 				});
 				
 			});
+		},
+		alertDialog: function(text){
+			var self = this;
+			var alertHtml = template($('#alertTpl').html(), {
+		        text: text
+		    });
+		    $('.dialog-box').html(alertHtml).addClass('show');
+		    $('.alert.alert-danger').alert();
+		    setTimeout(function(){
+		    	$('.dialog-box').removeClass('show');
+		    },3000);
+		    setTimeout(function(){
+		    	$('.alert.alert-danger').alert('close');
+		    },3300);
 		},
 		setCookie: function(cname, cvalue, exdays) {
 			var self = this;
@@ -61,6 +99,7 @@ $(function(){
 		    var expires = "expires="+d.toUTCString();
 		    document.cookie = cname + "=" + cvalue + "; " + expires;
 		},
+
 		getCookie: function(cname) {
 			var self = this;
 		    var name = cname + "=";
@@ -71,7 +110,14 @@ $(function(){
 		        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
 		    }
 		    return "";
-		}
+		},
+		getQueryString: function(name) { 
+			var self = this;
+	        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+	        var r = window.location.search.substr(1).match(reg); 
+	        if (r != null) return unescape(r[2]); 
+	        return null; 
+	    }
 	};
 	T.init();
 })

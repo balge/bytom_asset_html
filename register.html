@@ -10,6 +10,7 @@
 	<link rel="icon" href="./images/favicon.ico" />
 	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="./css/rl.css">	
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -21,7 +22,7 @@
 				<h1 class="text-center">注册</h1>
 			</div>
             <div class="modal-body">
-                <form id="registerForm">
+                <form id="registerForm" action="https://www.baidu.com">
 					<div class="form-group">
 						<label for="email">邮箱</label>
 						<input id="email" name="email" class="form-control" type="text" placeholder="例如:123@123.com">
@@ -46,9 +47,19 @@
             </div>
         </div>
     </div>
+    <div class="dialog-box">
+    	
+    </div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/validate.js"></script>
 <script src="./js/register.js"></script>
+<script src="./js/template.js"></script>
+<script id="alertTpl" type="text/html">
+	<div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <h4><%= text%></h4>
+    </div>
+</script>
 </html>

@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="./css/header.css">
 	<link rel="stylesheet" href="./css/my_asset.css">
 	<link rel="stylesheet" href="./css/layer.css">
+    <link rel="stylesheet" href="./css/rl.css"> 
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -54,14 +55,14 @@
 									<button type="button" class="btn btn-success btn-lg add-asset">
 									&nbsp;&nbsp;&nbsp;&nbsp;新增&nbsp;&nbsp;&nbsp;&nbsp;
 									</button>
-									<button type="button" class="btn btn-info btn-lg submit-asset">
+									<!-- <button type="button" class="btn btn-info btn-lg submit-asset">
 									&nbsp;&nbsp;&nbsp;&nbsp;提交&nbsp;&nbsp;&nbsp;&nbsp;
-									</button>
+									</button> -->
 								</div>
 								<div class="table-box">
 									<table class="table table-hover table-bordered">
 										<tr>
-											<th><input class="checkAll" type="checkbox" />全选</th>
+											<!-- <th><input class="checkAll" type="checkbox" />全选</th> -->
 											<th>序号</th>
 											<th>资产名称</th>
 											<th>资产数量</th>
@@ -129,6 +130,24 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+			    </div>
+			    <div class="modal-body">
+			     	
+      			</div>
+				<div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			        <button type="button" class="btn btn-primary btn-surePost" data-dismiss="modal">确定</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<div class="dialog-box"></div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
@@ -170,7 +189,6 @@
 <script id="addTpl" type="text/html">
 	<tbody>
 		<tr>
-			<th><input class="checkAll" type="checkbox" />全选</th>
 			<th>序号</th>
 			<th>资产名称</th>
 			<th>资产数量</th>
@@ -179,7 +197,6 @@
 		</tr>
 		<%for(var i in items){%> 
 		<tr class="item" data-id="<%= i%>">
-			<td><input class="checkSingle" type="checkbox" name="item" /></td>
 			<td><% if(i < 9){%>0<% }%><%=parseInt(i) + 1%></td>
 			<td class="name"><%= items[i].name%></td>
 			<td class="num"><%= items[i].num%></td>
@@ -187,10 +204,16 @@
 			<td>
 				<input type="button" name="" value="删除" class="btn btn-danger btn-del" />
 				<input type="button" name="" value="修改" class="btn btn-info btn-edit" />
+				<input type="button" name="" value="提交" class="btn btn-success btn-submit" />
 			</td>
 		</tr>
 		<% }%>
 	</tbody>
 </script>
-
+<script id="alertTpl" type="text/html">
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <h4><%= text%></h4>
+    </div>
+</script>
 </html>
