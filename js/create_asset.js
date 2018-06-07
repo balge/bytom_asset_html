@@ -313,6 +313,7 @@ $(function(){
 				event.preventDefault();
 				self.setCookie('username', '', -1);
 				self.setCookie('email', '', -1);
+				self.setItem('items', JSON.stringify(new Array()));
 				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 			});
 		},

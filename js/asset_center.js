@@ -119,6 +119,7 @@ $(function(){
 				event.preventDefault();
 				self.setCookie('username', '', -1);
 				self.setCookie('email', '', -1);
+				self.setItem('items', JSON.stringify(new Array()));
 				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 			});
 		},
@@ -139,6 +140,19 @@ $(function(){
 		        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
 		    }
 		    return "";
+		},
+		getItem: function (key) {
+			var self = this;
+			var value = localStorage.getItem(key);
+			if (value) {
+				return value;
+			}else{
+				return ""
+			}
+		},
+		setItem: function (key, value) {
+			var self = this;
+			localStorage.setItem(key, value);
 		}
 	};
 	T.init();
