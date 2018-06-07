@@ -6,6 +6,8 @@ $(function(){
 			self.pageSize =10;
 			self.loginStatus();
 			self.renderAsset();
+		    self.buyAsset();
+		    self.watchDesc();
 			self.logout();
 		},
 		loginStatus: function(){
@@ -67,8 +69,6 @@ $(function(){
 							items: JSON.parse(res.data)
 					    });
 					    $('.asset-table').html(assetHtml);
-					    self.buyAsset();
-					    self.watchDesc();
 					 //    if(!isReRender || isReRender != true){
 						// 	self.paginator(res.data.length,1);
 						// }
@@ -86,7 +86,7 @@ $(function(){
 		buyAsset: function(){
 			var self = this;
 			var index = 0;
-			$('.btn-buyAsset').on('click', function(event) {
+			$('body').on('click', '.btn-buyAsset', function(event) {
 				event.preventDefault();
 				index = $(this).parents('tr.item').attr('data-index');
 				var BuyModalHtml = template($('#buyModalTpl').html());
@@ -119,6 +119,7 @@ $(function(){
 						success: function(res){
 							console.log(res)
 							if(res.code == 200){
+								self.renderAsset();
 								self.alertDialog('购买成功', 'success');
 							}else{
 								self.alertDialog('购买失败', 'danger');
@@ -138,7 +139,7 @@ $(function(){
 		},
 		watchDesc: function(){
 			var self = this;
-			$('.btn-watchDesc').on('click', function(event) {
+			$('body').on('click', '.btn-watchDesc',function(event) {
 				event.preventDefault();
 				var desc = $(this).attr('data-desc');
 				$('#descModal .modal-body').html(desc);
