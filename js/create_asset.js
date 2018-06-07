@@ -36,24 +36,90 @@ $(function(){
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
 		},
+		validateForm: function(){
+			var self = this;
+			$('#addForm').bootstrapValidator({
+        		feedbackIcons: {
+		            valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+		        },
+		        fields: {
+		            name: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '资产名称不得为空'
+		                    },
+		                    stringLength: {
+		                        min: 1,
+		                        max: 15,
+		                        message: '资产名称长度在1-15个字符之间'
+		                    },
+		                }
+		            },
+		            desc: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '资产描述不得为空'
+		                    },
+		                    stringLength: {
+		                        max: 200,
+		                        message: '资产描述最多200字'
+		                    },
+		                }
+		            },
+		            num: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '资产数量不得为空'
+		                    },
+		                    regexp: {
+	                            regexp: /^[0-9]+$/,
+	                            message: '资产数量只能是数字'
+	                        }
+		                }
+		            },
+		            price: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '资产数量不得为空'
+		                    },
+		                    regexp: {
+	                            regexp: /^[0-9.]+$/,
+	                            message: '资产价格只能是数字'
+	                        }
+		                }
+		            }
+		        }
+			})
+		},
 		//增加资产
 		addList: function(){
 			var self = this;
-			$('#add').unbind('click').on('click', function(event) {
+			$('body').on('click', '#add', function(event) {
 				event.preventDefault();
-				var oName = $('#name').val();
-			    var oNum = $('#num').val();
-			    var oDesc = $('#desc').val();
-			    if(oName !== '' && oNum !== '' && oDesc !== ''){
+				var bootstrapValidator = $('#addForm').data('bootstrapValidator');
+				bootstrapValidator.validate();
+				if(bootstrapValidator.isValid()){
+					var oName = $('#name').val();
+				    var oNum = $('#num').val();
+				    var oDesc = $('#desc').val();
+				    var oPrice = $('#price').val();
 				    self.items.push({
 				    	name: oName,
 				    	num: oNum,
-				    	desc: oDesc
+				    	desc: oDesc,
+				    	price: oPrice
 				    });
-				    $('#reset').click();
+				    $('#myModal').modal('hide');
+				    $('#myModal').on('hidden.bs.modal',function() {
+				         $('.addModal').html('');
+				    })
+				    // $('.addModal').html('');
 				    self.handleReRender();//渲染列表
 				    self.setItem('items', JSON.stringify(self.items));
 				}
+				
 			});
 		},
 		// 修改资产
@@ -62,33 +128,42 @@ $(function(){
 			var index = 0;
 			$('.asset-block').on('click', '.btn-edit', function(event) {
 				event.preventDefault();
+				var AddModalHtml = template($('#addModalTpl').html());
+			    $('.addModal').html(AddModalHtml);
 				index = parseInt($(this).parents('tr').attr('data-id'));
 				$('#name').val($(this).parents('tr').find('.name').text());
 				$('#num').val($(this).parents('tr').find('.num').text());
 				$('#desc').val($(this).parents('tr').find('.desc').text());
+				$('#price').val($(this).parents('tr').find('.price').text());
 				//赋值给显示的表单
+			    self.validateForm();
 				$('#myModal').modal();
-				self.updateList(index);
 			});
+			self.updateList(index);
 		},
 		//编辑按钮之后，更新资产,参数：某一条产品的序列号
 		updateList: function(index){
 			var self = this;
-			$('#updata').unbind('click').on('click', function(event) {
+			$('body').on('click', '#updata', function(event) {
 				event.preventDefault();
 				var oName = $('#name').val();
 			    var oNum = $('#num').val();
 			    var oDesc = $('#desc').val();
+			    var oPrice = $('#price').val();
 			    //修改items列表
-			    if(oName !== '' && oNum !== '' && oDesc !== ''){
+			    if(oName !== '' && oNum !== '' && oDesc !== '' && oPrice !== ''){
 				    var items = self.items;
 					items.splice(index,1,{
 						name: oName,
 				    	num: oNum,
-				    	desc: oDesc
+				    	desc: oDesc,
+				    	price: oPrice
 					});//删除返回新元素
 					self.items = items;
-					$('#reset').click();
+					$('#myModal').modal('hide');
+				    $('#myModal').on('hidden.bs.modal',function() {
+				         $('.addModal').html('');
+				    })
 					self.handleReRender();//渲染列表
 				    self.setItem('items', JSON.stringify(self.items));
 				}
@@ -136,6 +211,9 @@ $(function(){
 			var self = this;
 			$('.add-asset').on('click', function(event) {
 				event.preventDefault();
+				var AddModalHtml = template($('#addModalTpl').html());
+			    $('.addModal').html(AddModalHtml);
+			    self.validateForm();
 				$('#myModal').modal();
 			});
 		},
@@ -196,34 +274,37 @@ $(function(){
 					// },
 			        success: function(res){
 			      		if(res.code == 200){
-			      			self.alertDialog('提交成功')
+			      			self.alertDialog('提交成功', 'success')
 			      			var items = self.items;
 							items.splice(self.index,1);//删除返回新元素
 							self.items = items;
 							self.handleReRender();//渲染列表
 							self.setItem('items', JSON.stringify(self.items));
+			      		}else if(res.code == -1) {
+			      			self.alertDialog('请前往个人中心认证身份', 'danger')
 			      		}else{
-			      			self.alertDialog('提交失败，请重试')
+			      			self.alertDialog('提交失败，请重试', 'danger')
 			      		}
 			        },
 			        error: function(){
-			        	self.alertDialog('提交失败，请重试');
+			        	self.alertDialog('提交失败，请重试', 'danger');
 			        }
 				});
 			});
 		},
-		alertDialog: function(text){
+		alertDialog: function(text, type){
 			var self = this;
 			var alertHtml = template($('#alertTpl').html(), {
-		        text: text
+		        text: text,
+		        type: type
 		    });
 		    $('.dialog-box').html(alertHtml).addClass('show');
-		    $('.alert.alert-danger').alert();
+		    $('.alert.alert-dismissible').alert();
 		    setTimeout(function(){
 		    	$('.dialog-box').removeClass('show');
 		    },2000);
 		    setTimeout(function(){
-		    	$('.alert.alert-danger').alert('close');
+		    	$('.alert.alert-dismissible').alert('close');
 		    },2300);
 		},
 		logout: function(){

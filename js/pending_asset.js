@@ -7,7 +7,7 @@ $(function(){
 			self.loginStatus();
 			self.renderAsset();
 			self.operateAsset();
-			self.checkAl();
+			// self.checkAl();
 			self.logout();
 		},
 		loginStatus: function(){
@@ -37,103 +37,147 @@ $(function(){
 		},
 		renderAsset: function(){
 			var self = this;
-			var data = {
-				"code": 200,
-				"msg": '请求成功',
-				data: [{
-					"name": "btm",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"desc": "这是资产描述",
-					"num": 10,
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm2",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"desc": "这是资产描述",
-					"num": 10,
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm3",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"desc": "这是资产描述",
-					"num": 10,
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm4",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"desc": "这是资产描述",
-					"num": 10,
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm5",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"desc": "这是资产描述",
-					"num": 10,
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				}]
-			};
-
-			var assetHtml = template($('#assetTpl').html(), {
-				items: data.data
-		    });
-		    $('.asset-pending .table-box').html(assetHtml);
+			$.ajax({
+				url: 'http://192.168.199.62:5000/api/get_define_assets',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					email: self.getCookie('email'),
+				},
+				success: function(res){
+					console.log(JSON.parse(res.data))
+					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
+						var assetHtml = template($('#assetTpl').html(), {
+							items: JSON.parse(res.data).filter(function(a){return a.status !==3 })
+					    });
+					    $('.asset-table .table-box').html(assetHtml);
+					}else{
+						$('.asset-table .table-box').html('<h4>暂时无待审核/发布资产～～</h4>')
+					}
+				},
+				error: function(){
+					$('.asset-table .table-box').html('<h4>暂时无待审核/发布资产～～</h4>')
+				}
+			})
 		},
 		operateAsset: function(){
 			var self = this;
 
 			//显示确认操作弹窗
-			$('.btn-allDel').on('click', function(event) {
-				event.preventDefault();
-				var modalHtml = template($('#modalTpl').html(), {
-			        tips: '确定批量删除选中资产？',
-			        type: "delAll"
-			    });
-			    $('.modal-box').html(modalHtml);
-			    $('#myModal').modal();
-			});
+			// $('.btn-allDel').on('click', function(event) {
+			// 	event.preventDefault();
+			// 	var modalHtml = template($('#modalTpl').html(), {
+			//         tips: '确定批量删除选中资产？',
+			//         type: "delAll"
+			//     });
+			//     $('.modal-box').html(modalHtml);
+			//     $('#myModal').modal();
+			// });
 
-			$('.btn-allPending').on('click', function(event) {
-				event.preventDefault();
-				var modalHtml = template($('#modalTpl').html(), {
-			        tips: '确定批量审批选中资产？',
-			        type: "pendingAll"
-			    });
-			    $('.modal-box').html(modalHtml);
-			    $('#myModal').modal();
-			});
+			// $('.btn-allPending').on('click', function(event) {
+			// 	event.preventDefault();
+			// 	var modalHtml = template($('#modalTpl').html(), {
+			//         tips: '确定批量审批选中资产？',
+			//         type: "pendingAll"
+			//     });
+			//     $('.modal-box').html(modalHtml);
+			//     $('#myModal').modal();
+			// });
+			// 
+			// 
+			// //批量删除
+			// $('body').on('click', '.btn-delAll', function(event) {
+			// 	event.preventDefault();
+			// 	var params = [];
+			// 	$('.asset-pending tr.item').each(function(index, el) {
+			// 		if($(this).find('.checkSingle').is(':checked')){
+			// 			params.push({
+			// 				name: $(this).find('.name').text(),
+			// 		    	num: $(this).find('.num').text(),
+			// 		    	desc: $(this).find('.desc').text()
+			// 			})
+			// 		}
+					
+			// 	});
+			// 	console.log(JSON.stringify(params))
+			// 	if(params.legth > 0){//有数据选中后提交
+			// 		// $.ajax({
+			// 	 //      type: "POST",
+			// 	 //      url: "/url.do",
+			// 	 //      data: params,
+			// 	 //      dataType : "json",
+			// 	 //      success: function(res){
+			// 	 			// self.renderAsset();
+			// 	 //      }
+			// 		// });
+			// 	}
+			// });
 
-			$('body').on('click', '.btn-del', function(event) {
-				event.preventDefault();
-				self.index = parseInt($(this).parents('.item').attr('data-id'));
-				var index = self.index + 1;
-				var modalHtml = template($('#modalTpl').html(), {
-			        tips: '确定删除第' + index + '条资产？',
-			        type: "delOne"
-			    });
-			    $('.modal-box').html(modalHtml);
-			    $('#myModal').modal();
-			});
+			// //批量审批
+			// $('body').on('click', '.btn-pendingAll', function(event) {
+			// 	event.preventDefault();
+			// 	var params = [];
+			// 	$('.asset-pending tr.item').each(function(index, el) {
+			// 		if($(this).find('.checkSingle').is(':checked')){
+			// 			params.push({
+			// 				name: $(this).find('.name').text(),
+			// 		    	num: $(this).find('.num').text(),
+			// 		    	desc: $(this).find('.desc').text()
+			// 			})
+			// 		}
+					
+			// 	});
+			// 	console.log(JSON.stringify(params))
+			// 	if(params.legth > 0){//有数据选中后提交
+			// 		// $.ajax({
+			// 	 //      type: "POST",
+			// 	 //      url: "/url.do",
+			// 	 //      data: params,
+			// 	 //      dataType : "json",
+			// 	 //      success: function(res){
+			// 	 			// self.renderAsset();
+			// 	 //      }
+			// 		// });
+			// 	}
+			// });
 
+			// $('body').on('click', '.btn-del', function(event) {
+			// 	event.preventDefault();
+			// 	self.index = parseInt($(this).parents('.item').attr('data-id'));
+			// 	var index = self.index + 1;
+			// 	var modalHtml = template($('#modalTpl').html(), {
+			//         tips: '确定删除第' + index + '条资产？',
+			//         type: "delOne"
+			//     });
+			//     $('.modal-box').html(modalHtml);
+			//     $('#myModal').modal();
+			// });
+
+
+
+			// //单个删除
+			// $('body').on('click', '.btn-delOne', function(event) {
+			// 	event.preventDefault();
+			// 	var params = [];
+			// 	params.push({
+			// 		name: $('.item').eq(self.index).find('.name').text(),
+			//     	num: $('.item').eq(self.index).find('.num').text(),
+			//     	desc: $('.item').eq(self.index).find('.desc').text()
+			// 	});
+			// 	console.log(JSON.stringify(params))
+			// 	// $.ajax({
+			// 	 //      type: "POST",
+			// 	 //      url: "/url.do",
+			// 	 //      data: params,
+			// 	 //      dataType : "json",
+			// 	 //      success: function(res){
+			// 	 			// self.renderAsset();
+			// 	 //      }
+			// 		// });
+			// });
+
+			//单个审批
+			
 			$('body').on('click', '.btn-pending', function(event) {
 				event.preventDefault();
 				self.index = parseInt($(this).parents('.item').attr('data-id'));
@@ -145,108 +189,94 @@ $(function(){
 			    $('.modal-box').html(modalHtml);
 			    $('#myModal').modal();
 			});
-
-			//批量删除
-			$('body').on('click', '.btn-delAll', function(event) {
-				event.preventDefault();
-				var params = [];
-				$('.asset-pending tr.item').each(function(index, el) {
-					if($(this).find('.checkSingle').is(':checked')){
-						params.push({
-							name: $(this).find('.name').text(),
-					    	num: $(this).find('.num').text(),
-					    	desc: $(this).find('.desc').text()
-						})
-					}
-					
-				});
-				console.log(JSON.stringify(params))
-				if(params.legth > 0){//有数据选中后提交
-					// $.ajax({
-				 //      type: "POST",
-				 //      url: "/url.do",
-				 //      data: params,
-				 //      dataType : "json",
-				 //      success: function(res){
-				 			// self.renderAsset();
-				 //      }
-					// });
-				}
-			});
-
-			//批量审批
-			$('body').on('click', '.btn-pendingAll', function(event) {
-				event.preventDefault();
-				var params = [];
-				$('.asset-pending tr.item').each(function(index, el) {
-					if($(this).find('.checkSingle').is(':checked')){
-						params.push({
-							name: $(this).find('.name').text(),
-					    	num: $(this).find('.num').text(),
-					    	desc: $(this).find('.desc').text()
-						})
-					}
-					
-				});
-				console.log(JSON.stringify(params))
-				if(params.legth > 0){//有数据选中后提交
-					// $.ajax({
-				 //      type: "POST",
-				 //      url: "/url.do",
-				 //      data: params,
-				 //      dataType : "json",
-				 //      success: function(res){
-				 			// self.renderAsset();
-				 //      }
-					// });
-				}
-			});
-
-
-			//单个删除
-			$('body').on('click', '.btn-delOne', function(event) {
-				event.preventDefault();
-				var params = [];
-				params.push({
-					name: $('.item').eq(self.index).find('.name').text(),
-			    	num: $('.item').eq(self.index).find('.num').text(),
-			    	desc: $('.item').eq(self.index).find('.desc').text()
-				});
-				console.log(JSON.stringify(params))
-				// $.ajax({
-				 //      type: "POST",
-				 //      url: "/url.do",
-				 //      data: params,
-				 //      dataType : "json",
-				 //      success: function(res){
-				 			// self.renderAsset();
-				 //      }
-					// });
-			});
-
-			//单个删除
 			$('body').on('click', '.btn-pendingOne', function(event) {
 				event.preventDefault();
-				var params = [];
-				params.push({
-					name: $('.item').eq(self.index).find('.name').text(),
-			    	num: $('.item').eq(self.index).find('.num').text(),
-			    	desc: $('.item').eq(self.index).find('.desc').text()
-				});
+				var params = {
+					"assets_name": $('.item').eq(self.index).find('.name').text(),
+					"email": self.getCookie('email')
+				};
 				console.log(JSON.stringify(params))
-				// $.ajax({
-				 //      type: "POST",
-				 //      url: "/url.do",
-				 //      data: params,
-				 //      dataType : "json",
-				 //      success: function(res){
-				 			// self.renderAsset();
-				 //      }
-					// });
+				$.ajax({
+				    url: 'http://192.168.199.62:5000/api/assets_audit',
+					type: 'POST',
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(params),
+					success: function(res){
+						if(res.code == 200){
+							$('.item').eq(self.index).find('.btn-pending').button('loading');
+							self.alertDialog('提交审核成功', 'success');
+						}
+						else{
+							self.alertDialog('提交审核失败', 'danger');
+						}
+					},
+					error: function(){
+						self.alertDialog('提交审核失败', 'danger');
+					}
+				});
+			});
+
+			//单个发布
+			$('body').on('click', '.btn-publish', function(event) {
+				event.preventDefault();
+				self.index = parseInt($(this).parents('.item').attr('data-index'));
+				var index = self.index + 1;
+				var modalHtml = template($('#modalTpl').html(), {
+			        tips: '确定发布第' + index + '条资产？',
+			        type: "publishOne"
+			    });
+			    $('.modal-box').html(modalHtml);
+			    $('#myModal').modal();
+			});
+			$('body').on('click', '.btn-publishOne', function(event) {
+				event.preventDefault();
+				var params = {
+					"assets_name": $('.item').eq(self.index).find('.name').text(),
+					"email": self.getCookie('email')
+				};
+				console.log(JSON.stringify(params))
+				$.ajax({
+				    url: 'http://192.168.199.62:5000/api/assets_issue',
+					type: 'POST',
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(params),
+					success: function(res){
+						if(res.code == 200){
+							$('.item').eq(self.index).find('.btn-publish').button('loading');
+							self.renderAsset();
+							self.alertDialog('发布成功', 'success');
+						}
+						else{
+							self.alertDialog('发布失败', 'danger');
+						}
+					},
+					error: function(){
+						self.alertDialog('发布失败', 'danger');
+					}
+				});
 			});
 
 
 		},
+
+		alertDialog: function(text, type){
+			var self = this;
+			var alertHtml = template($('#alertTpl').html(), {
+		        text: text,
+		        type: type
+		    });
+		    $('.dialog-box').html(alertHtml).addClass('show');
+		    $('.alert.alert-dismissible').alert();
+		    setTimeout(function(){
+		    	$('.dialog-box').removeClass('show');
+		    },2000);
+		    setTimeout(function(){
+		    	$('.alert.alert-dismissible').alert('close');
+		    },2300);
+		},
+
 		logout: function(){
 			var self = this;
 			$('.logout').on('click', function(event) {

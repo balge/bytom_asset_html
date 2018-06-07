@@ -24,6 +24,10 @@
   line-height: 50px;
   text-align: center;
   width: 18%;
+  white-space: nowrap;
+}
+.asset-box .asset-table table td p {
+  margin: 0;
 }
 .asset-box .asset-table table td:nth-last-child(1) {
   width: 28%;

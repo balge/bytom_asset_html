@@ -37,14 +37,14 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row">
+		<!-- <div class="row"> -->
 			<div class="com-sm-12 J_tab">
 				<ul class="tab-nav clearfix">
 					<li><a href="my_asset.html">资产概况</a></li>
 					<li><a href="published_asset.html">已发布资产</a></li>
 					<li><a href="purchased_asset.html">已购买资产</a></li>
 					<li class="active"><a href="create_asset.html">创建资产</a></li>
-					<li><a href="pending_asset.html">待审核资产</a></li>
+					<li><a href="pending_asset.html">待审核/发布资产</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pannel asset-create clearfix">
@@ -67,6 +67,7 @@
 											<th>资产名称</th>
 											<th>资产数量</th>
 											<th>资产描述</th>
+											<th>资产价格</th>
 											<th>操作</th>
 										</tr>
 									</table>
@@ -76,43 +77,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		<!-- </div> -->
 	</div>
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">新增数据</h4>
-			    </div>
-			    <div class="modal-body">
-			     	<form>
-						<table class="table table-hover table-bordered">
-							<tr>
-								<th>资产名称</th>
-								<td><input type="text" name="" class="form-control" id="name" /></td>
-							</tr>
-							<tr>
-								<th>资产数量</th>
-								<td><input type="number" name="" class="form-control" id="num" /></td>
-							</tr>
-							<tr>
-								<th>资产描述</th>
-								<td><input type="text" name="" class="form-control" id="desc" /></td>
-							</tr>
-							<tr>
-								<td colspan="2" style="text-align:center;">
-									<input type="reset" value="重置" class="btn btn-primary" id="reset" />   
-					                <input data-dismiss="modal" type="button" value="添加"  class="btn btn-success" id="add"/>
-					                <input data-dismiss="modal" type="button" value="更新"  class="btn btn-info" id="updata"/>
-								</td>
-							</tr>
-						</table>
-					</form>
-      			</div>
-			</div>
-		</div>
-	</div>
+	<div class="addModal"></div>
 	<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -152,6 +119,7 @@
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/template.js"></script>
+<script src="./js/validate.js"></script>
 <script src="./js/create_asset.js"></script>
 
 <script id="navTpl" type="text/html">
@@ -185,7 +153,43 @@
         <% } %>
 	</ul>
 </script>
-
+<script id="addModalTpl" type="text/html">
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">新增数据</h4>
+			    </div>
+			    <div class="modal-body">
+			     	<form id="addForm">
+			     		<div class="form-group">
+	                        <label for="name">资产名称</label>
+	                        <input type="text" name="name" class="form-control" id="name" placeholder="资产名称" />
+	                	</div>
+	                	<div class="form-group">
+	                        <label for="num">资产数量</label>
+	                        <input type="text" name="num" class="form-control" id="num" placeholder="资产数量" />
+	                	</div>
+	                	<div class="form-group">
+	                        <label for="price">资产价格</label>
+	                        <input type="text" name="price" class="form-control" id="price" placeholder="资产价格" />
+	                	</div>
+	                	<div class="form-group">
+	                        <label for="desc">资产描述</label>
+	                        <textarea style="width:100%;height:60px;outline:none;border: 1px solid #ccc;border-radius: 4px;resize:none;" name="desc" id="desc" cols="30" rows="10"></textarea>
+	                	</div>
+	                	<div>
+	                		<input type="reset" value="重置" class="btn btn-primary" id="reset" />   
+			                <input type="button" value="添加"  class="btn btn-success" id="add"/>
+			                <input type="button" value="更新"  class="btn btn-info" id="updata"/>
+	                	</div>
+					</form>
+	  			</div>
+			</div>
+		</div>
+	</div>
+</script>
 <script id="addTpl" type="text/html">
 	<tbody>
 		<tr>
@@ -193,6 +197,7 @@
 			<th>资产名称</th>
 			<th>资产数量</th>
 			<th>资产描述</th>
+			<th>资产价格</th>
 			<th>操作</th>
 		</tr>
 		<%for(var i in items){%> 
@@ -200,7 +205,11 @@
 			<td><% if(i < 9){%>0<% }%><%=parseInt(i) + 1%></td>
 			<td class="name"><%= items[i].name%></td>
 			<td class="num"><%= items[i].num%></td>
-			<td class="desc"><%= items[i].desc%></td>
+			<td class="desc-wrap">
+				<p class="desc" style="display:none;"><%= items[i].desc%></p>
+				<p class="showdesc" title="<%= items[i].desc%>"><% if(items[i].desc.length >= 10){%><%= items[i].desc.substr(0,10)%>...<%}else{%><%= items[i].desc%><%}%></p>
+			</td>
+			<td class="price"><%= items[i].price%></td>
 			<td>
 				<input type="button" name="" value="删除" class="btn btn-danger btn-del" />
 				<input type="button" name="" value="修改" class="btn btn-info btn-edit" />
@@ -211,7 +220,7 @@
 	</tbody>
 </script>
 <script id="alertTpl" type="text/html">
-    <div class="alert alert-danger alert-dismissible" role="alert">
+    <div class="alert alert-<%= type%> alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
       <h4><%= text%></h4>
     </div>

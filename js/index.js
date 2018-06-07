@@ -26,6 +26,29 @@ $(function(){
 		    });
 		    $('.welcome-txt').html(welcomeHtml);
 		},
+		validateForm: function(){
+			var self = this;
+			$('#buyForm').bootstrapValidator({
+        		feedbackIcons: {
+		            valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+		        },
+		        fields: {
+		            buyNum: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '购买数量不得为空'
+		                    },
+		                    regexp: {
+	                            regexp: /^[0-9]+$/,
+	                            message: '购买数量只能是数字'
+	                        }
+		                }
+		            }
+		        }
+			})
+		},
 		renderAsset: function(pageNum,isReRender){
 			var self = this;
 			//ajax请求可购买资产返回data
@@ -34,27 +57,110 @@ $(function(){
 				type: 'GET',
 				dataType: 'json',
 				data: {
-					pageNum: pageNum || 1,
-					pageSize: self.pageSize
+					// pageNum: pageNum || 1,
+					// pageSize: self.pageSize
 				},
 				success: function(res){
-					if(res.code == 200 && res.data && res.data.length > 0){
+					console.log(JSON.parse(res.data))
+					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
 						var assetHtml = template($('#assetTpl').html(), {
-							items: data.data
+							items: JSON.parse(res.data)
 					    });
 					    $('.asset-table').html(assetHtml);
-					    if(!isReRender || isReRender != true){
-							self.paginator(data.data.length,1);
-						}
+					    self.buyAsset();
+					    self.watchDesc();
+					 //    if(!isReRender || isReRender != true){
+						// 	self.paginator(res.data.length,1);
+						// }
+					}else{
+						$('.asset-table').html('<h4>暂时无可购买资产～～</h4>')
 					}
 				},
 				error: function(){
-
+					$('.asset-table').html('<h4>暂时无可购买资产～～</h4>')
 				}
 			})
 
 			
 		},
+		buyAsset: function(){
+			var self = this;
+			var index = 0;
+			$('.btn-buyAsset').on('click', function(event) {
+				event.preventDefault();
+				index = $(this).parents('tr.item').attr('data-index');
+				var BuyModalHtml = template($('#buyModalTpl').html());
+			    $('.buyModal').html(BuyModalHtml);
+			    self.validateForm();
+				$('#buyModal').modal();
+			});
+			$('body').on('click', '.btn-sureBuy', function(event) {
+				event.preventDefault();
+				var bootstrapValidator = $('#buyForm').data('bootstrapValidator');
+				bootstrapValidator.validate();
+				if(bootstrapValidator.isValid()){
+					var params = {
+						"assets_id": $('tr.item').eq(index).find('.owner').attr('data-data'),
+						"assets_name": $('tr.item').eq(index).find('.name').attr('data-data'),
+						"assets_num": parseInt($('#buyNum').val()),
+						"id": $('tr.item').eq(index).attr('data-itemid'),
+						"email": self.getCookie('email')
+					}
+					$.ajax({
+						url: 'http://192.168.199.62:5000/api/assets_purchase',
+						type: 'POST',
+						dataType: 'json',
+						contentType: 'application/json',
+						data: JSON.stringify(params),
+						// crossDomain: true,
+						// xhrFields: {
+						// 	withCredentials: true
+						// },
+						success: function(res){
+							console.log(res)
+							if(res.code == 200){
+								self.alertDialog('购买成功', 'success');
+							}else{
+								self.alertDialog('购买失败', 'danger');
+							}
+						},
+						error: function(){
+							//失败情况处理
+							self.alertDialog('购买失败', 'danger');
+						}
+					});
+					$('#buyModal').modal('hide');
+				    $('#buyModal').on('hidden.bs.modal',function() {
+				         $('.buyModal').html('');
+				    })
+				}
+			});
+		},
+		watchDesc: function(){
+			var self = this;
+			$('.btn-watchDesc').on('click', function(event) {
+				event.preventDefault();
+				var desc = $(this).attr('data-desc');
+				$('#descModal .modal-body').html(desc);
+			});
+		},
+
+		alertDialog: function(text, type){
+			var self = this;
+			var alertHtml = template($('#alertTpl').html(), {
+		        text: text,
+		        type: type
+		    });
+		    $('.dialog-box').html(alertHtml).addClass('show');
+		    $('.alert.alert-dismissible').alert();
+		    setTimeout(function(){
+		    	$('.dialog-box').removeClass('show');
+		    },2000);
+		    setTimeout(function(){
+		    	$('.alert.alert-dismissible').alert('close');
+		    },2300);
+		},
+
 		paginator: function(total,current){
 			var self = this;
 			$(".pagination-wrap .pagination").jqPaginator({

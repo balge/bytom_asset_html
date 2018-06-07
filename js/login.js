@@ -65,31 +65,32 @@ $(function(){
 							}
 
 						} else if(res.code == -1){
-							self.alertDialog('账号或密码错误');
+							self.alertDialog('账号或密码错误', 'danger');
 						} else if(res.code == -2){
-							self.alertDialog('请验证登录邮箱');
+							self.alertDialog('请验证登录邮箱', 'danger');
 						}
 					},
 					error: function(){
 						//失败情况处理
-						self.alertDialog('服务器异常');
+						self.alertDialog('服务器异常', 'danger');
 					}
 				});
 				
 			});
 		},
-		alertDialog: function(text){
+		alertDialog: function(text, type){
 			var self = this;
 			var alertHtml = template($('#alertTpl').html(), {
-		        text: text
+		        text: text,
+		        type: type
 		    });
 		    $('.dialog-box').html(alertHtml).addClass('show');
-		    $('.alert.alert-danger').alert();
+		    $('.alert.alert-dismissible').alert();
 		    setTimeout(function(){
 		    	$('.dialog-box').removeClass('show');
 		    },3000);
 		    setTimeout(function(){
-		    	$('.alert.alert-danger').alert('close');
+		    	$('.alert.alert-dismissible').alert('close');
 		    },3300);
 		},
 		setCookie: function(cname, cvalue, exdays) {

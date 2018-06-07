@@ -54,6 +54,10 @@
 		.asset-survey{
 			.survey-list{
 				width: 65%;
+				a{
+					text-decoration: none;
+					color: inherit;
+				}
 				.survey-block{
 					padding: 20px;
 					height: 200px;
@@ -121,10 +125,17 @@
 	    			text-align: center;
 	    		}
 	    		td{
+	    			white-space: nowrap;
 	    			height: 50px;
 	    			line-height: 50px;
 	    			text-align: center;
 	    			width: 18%;
+	    			max-height: 67px;
+	    			min-width: 67px;
+	    			overflow: hidden;
+	    			p{
+	    				margin: 0;
+	    			}
 	    			&:nth-last-child(1){
 	    				width: 28%;
 	    			}

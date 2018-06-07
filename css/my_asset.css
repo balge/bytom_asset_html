@@ -58,6 +58,10 @@
 .J_tab .tab-content .asset-survey .survey-list {
   width: 65%;
 }
+.J_tab .tab-content .asset-survey .survey-list a {
+  text-decoration: none;
+  color: inherit;
+}
 .J_tab .tab-content .asset-survey .survey-list .survey-block {
   padding: 20px;
   height: 200px;
@@ -119,10 +123,17 @@
   text-align: center;
 }
 .J_tab .tab-content .asset-table table td {
+  white-space: nowrap;
   height: 50px;
   line-height: 50px;
   text-align: center;
   width: 18%;
+  max-height: 67px;
+  min-width: 67px;
+  overflow: hidden;
+}
+.J_tab .tab-content .asset-table table td p {
+  margin: 0;
 }
 .J_tab .tab-content .asset-table table td:nth-last-child(1) {
   width: 28%;

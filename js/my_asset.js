@@ -5,7 +5,7 @@ $(function(){
 			self.userName = self.getCookie('username');
 			self.pageSize =10;
 			self.loginStatus();
-			self.renderAsset();
+			// self.renderAsset();
 			self.renderSurveyBlock();
 			self.logout();
 		},
@@ -34,81 +34,81 @@ $(function(){
 				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 			});
 		},
-		renderAsset: function(pageNum,isReRender){
-			var self = this;
-			//ajax请求可购买资产返回data
-			// $.ajax({
-			// 	url: 'http://192.168.199.62:5000/api/personal_assets',
-			// 	type: 'GET',
-			// 	dataType: 'json',
-			// 	data: {
-			// 		pageNum: pageNum || 1,
-			// 		pageSize: self.pageSize,
-			// 		email: 
-			// 	}
-			// 	success: function(){
+		// renderAsset: function(pageNum,isReRender){
+		// 	var self = this;
+		// 	//ajax请求可购买资产返回data
+		// 	// $.ajax({
+		// 	// 	url: 'http://192.168.199.62:5000/api/personal_assets',
+		// 	// 	type: 'GET',
+		// 	// 	dataType: 'json',
+		// 	// 	data: {
+		// 	// 		pageNum: pageNum || 1,
+		// 	// 		pageSize: self.pageSize,
+		// 	// 		email: 
+		// 	// 	}
+		// 	// 	success: function(){
 
-			// 	},
-			// 	error: function(){
+		// 	// 	},
+		// 	// 	error: function(){
 
-			// 	}
-			// })
-			var data = {
-				"code": 200,
-				"msg": '请求成功',
-				"pageNum": 1,
-				"pageSize": 10,
-				data: [{
-					"name": "btm",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm2",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm3",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm4",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm5",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				}]
-			};
+		// 	// 	}
+		// 	// })
+		// 	var data = {
+		// 		"code": 200,
+		// 		"msg": '请求成功',
+		// 		"pageNum": 1,
+		// 		"pageSize": 10,
+		// 		data: [{
+		// 			"name": "btm",
+		// 			"owner": "bytom",
+		// 			"time": "2018/06/03",
+		// 			"price": 1000,
+		// 			"detailUrl": "http://www.baidu.com",//详情地址
+		// 			"orderUrl": "http://www.google.com",//购买地址
+		// 			"id": 100//产品id
+		// 		},{
+		// 			"name": "btm2",
+		// 			"owner": "bytom",
+		// 			"time": "2018/06/03",
+		// 			"price": 1000,
+		// 			"detailUrl": "http://www.baidu.com",//详情地址
+		// 			"orderUrl": "http://www.google.com",//购买地址
+		// 			"id": 100//产品id
+		// 		},{
+		// 			"name": "btm3",
+		// 			"owner": "bytom",
+		// 			"time": "2018/06/03",
+		// 			"price": 1000,
+		// 			"detailUrl": "http://www.baidu.com",//详情地址
+		// 			"orderUrl": "http://www.google.com",//购买地址
+		// 			"id": 100//产品id
+		// 		},{
+		// 			"name": "btm4",
+		// 			"owner": "bytom",
+		// 			"time": "2018/06/03",
+		// 			"price": 1000,
+		// 			"detailUrl": "http://www.baidu.com",//详情地址
+		// 			"orderUrl": "http://www.google.com",//购买地址
+		// 			"id": 100//产品id
+		// 		},{
+		// 			"name": "btm5",
+		// 			"owner": "bytom",
+		// 			"time": "2018/06/03",
+		// 			"price": 1000,
+		// 			"detailUrl": "http://www.baidu.com",//详情地址
+		// 			"orderUrl": "http://www.google.com",//购买地址
+		// 			"id": 100//产品id
+		// 		}]
+		// 	};
 
-			var assetHtml = template($('#assetTpl').html(), {
-				items: data.data
-		    });
-		    $('.asset-table').html(assetHtml);
-		    if(!isReRender || isReRender != true){
-				self.paginator(data.data.length,1);
-			}
-		},
+		// 	var assetHtml = template($('#assetTpl').html(), {
+		// 		items: data.data
+		//     });
+		//     $('.asset-table').html(assetHtml);
+		//     if(!isReRender || isReRender != true){
+		// 		self.paginator(data.data.length,1);
+		// 	}
+		// },
 		renderSurveyBlock: function(){
 			var self = this;
 			//ajax请求可购买资产返回data
@@ -117,6 +117,7 @@ $(function(){
 			// 	type: 'GET',
 			// 	dataType: 'json',
 			// 	data: {
+					// email: self.getCookie('email')
 			// 	}
 			// 	success: function(){
 

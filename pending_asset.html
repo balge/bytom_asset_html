@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./css/header.css">
 	<link rel="stylesheet" href="./css/my_asset.css">
+    <link rel="stylesheet" href="./css/rl.css"> 
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -35,28 +36,28 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row">
+		<!-- <div class="row"> -->
 			<div class="com-sm-12 J_tab">
 				<ul class="tab-nav clearfix">
 					<li><a href="my_asset.html">资产概况</a></li>
 					<li><a href="published_asset.html">已发布资产</a></li>
 					<li><a href="purchased_asset.html">已购买资产</a></li>
 					<li><a href="create_asset.html">创建资产</a></li>
-					<li class="active"><a href="pending_asset.html">待审核资产</a></li>
+					<li class="active"><a href="pending_asset.html">待审核/发布资产</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pannel asset-pending clearfix">
 						<div class="asset-block">
 							<h3>待审核资产</h3>
 							<div class="asset-table">
-								<div class="operate-list clearfix">
+								<!-- <div class="operate-list clearfix">
 									<button type="button" class="btn btn-danger btn-lg btn-allDel">
 									批量删除
 									</button>
 									<button type="button" class="btn btn-info btn-lg btn-allPending">
 									批量审批
 									</button>
-								</div>
+								</div> -->
 								<div class="table-box">
 									
 								</div>
@@ -65,7 +66,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		<!-- </div> -->
 	</div>
 	<div class="modal-box"></div>
 </body>
@@ -109,23 +110,33 @@
 <script id="assetTpl" type="text/html">
 	<table class="table table-hover table-bordered">
 		<tr>
-			<th><input class="checkAll" type="checkbox" />全选</th>
 			<th>序号</th>
 			<th>资产名称</th>
 			<th>资产数量</th>
 			<th>资产描述</th>
+			<th>资产价格</th>
 			<th>操作</th>
 		</tr>
 		<%for(var i in items){%> 
-		<tr class="item" data-id="<%= i%>">
-			<td><input class="checkSingle" type="checkbox" name="item" /></td>
+		<tr class="item" data-index="<%= i%>" data-itemid="<%= items[i].assets_id%>">
 			<td><% if(i < 9){%>0<% }%><%=parseInt(i) + 1%></td>
-			<td class="name"><%= items[i].name%></td>
-			<td class="num"><%= items[i].num%></td>
-			<td class="desc"><%= items[i].desc%></td>
+			<td class="name"><%= items[i].assets_name%></td>
+			<td class="num"><%= items[i].assets_num%></td>
+			<td class="desc-wrap">
+				<p class="desc" style="display:none;"><%= items[i].assets_desc%></p>
+				<p class="showdesc" title="<%= items[i].assets_desc%>"><% if(items[i].assets_desc.length >= 10){%><%= items[i].assets_desc.substr(0,10)%>...<%}else{%><%= items[i].assets_desc%><%}%></p>
+			</td>
+			<td class="desc"><% if(items[i].price){%><%= items[i].price.toFixed(2)%><% }else{%>/<% }%></td>
 			<td>
-				<input type="button" name="" value="删除" class="btn btn-danger btn-del" />
-				<input type="button" name="" value="审批" class="btn btn-info btn-pending" />
+				<% if(items[i].status === 0){%>
+				<input type="button" name="" value="审批" data-loading-text="审批中..." class="btn btn-info btn-pending" />
+				<% }else if(items[i].status === 1){%>
+				<input type="button" name="" value="审批中..." class="btn btn-info btn-needpending" disabled="disabled" />
+				<% }else if(items[i].status === 2){%>
+				<input type="button" name="" value="发布" data-loading-text="发布中..." class="btn btn-success btn-publish" />
+				<% }else{%>
+				<input type="button" name="" value="已发布" class="btn btn-success" disabled="disabled" />
+				<% }%>
 			</td>
 		</tr>
 		<% }%>
@@ -146,12 +157,18 @@
       			</div>
 				<div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-			        <button type="button" class="btn btn-primary <% if(type==='delAll'){%>btn-delAll<%}else if(type == 'pendingAll'){%>btn-pendingAll<%}else if(type == 'delOne'){%>btn-delOne<%}else{%>btn-pendingOne<%}%>" data-dismiss="modal">确定</button>
+			        <button type="button" class="btn btn-primary <% if(type==='delAll'){%>btn-delAll<%}else if(type == 'pendingAll'){%>btn-pendingAll<%}else if(type == 'delOne'){%>btn-delOne<%}else if(type == 'publishOne'){%>btn-publishOne<%}else{%>btn-pendingOne<%}%>" data-dismiss="modal">确定</button>
 			    </div>
 			</div>
 		</div>
 	</div>
 </script>
 
+<script id="alertTpl" type="text/html">
+    <div class="alert alert-<%= type%> alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <h4><%= text%></h4>
+    </div>
+</script>
 
 </html>

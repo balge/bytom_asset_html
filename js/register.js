@@ -107,25 +107,33 @@ $(function(){
 							window.location.href = 'login.html';
 						}else if(res.code == -1){
 							//邮箱已经注册
-							var alertHtml = template($('#alertTpl').html(), {
-						        text: '邮箱已经注册'//已经登录
-						    });
-						    $('.dialog-box').html(alertHtml).addClass('show');
-						    $('.alert.alert-danger').alert();
-						    setTimeout(function(){
-						    	$('.dialog-box').removeClass('show');
-						    	$('.alert.alert-danger').alert('close');
-						    },3000);
+							self.alertDialog('邮箱已经注册', 'danger');
 						}else{
-
+							self.alertDialog('服务器异常', 'danger');
 						}
 					},
 					error: function(){
 						//失败情况处理
+						self.alertDialog('服务器异常', 'danger');
 					}
 				});
 				
 			});
+		},
+		alertDialog: function(text, type){
+			var self = this;
+			var alertHtml = template($('#alertTpl').html(), {
+		        text: text,
+		        type: type
+		    });
+		    $('.dialog-box').html(alertHtml).addClass('show');
+		    $('.alert.alert-dismissible').alert();
+		    setTimeout(function(){
+		    	$('.dialog-box').removeClass('show');
+		    },3000);
+		    setTimeout(function(){
+		    	$('.alert.alert-dismissible').alert('close');
+		    },3300);
 		},
 		setCookie: function(cname, cvalue, exdays) {
 			var self = this;

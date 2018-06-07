@@ -35,14 +35,14 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row">
+		<!-- <div class="row"> -->
 			<div class="com-sm-12 J_tab">
 				<ul class="tab-nav clearfix">
 					<li><a href="my_asset.html">资产概况</a></li>
 					<li><a href="published_asset.html">已发布资产</a></li>
 					<li class="active"><a href="purchased_asset.html">已购买资产</a></li>
 					<li><a href="create_asset.html">创建资产</a></li>
-					<li><a href="pending_asset.html">待审核资产</a></li>
+					<li><a href="pending_asset.html">待审核/发布资产</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pannel asset-owner clearfix">
@@ -50,12 +50,29 @@
 							<h3>已购买资产</h3>
 							<div class="asset-table">
 							</div>
-							<div class="pagination-wrap">
+							<!-- <div class="pagination-wrap">
 							  <ul class="pagination"></ul>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
+			</div>
+		<!-- </div> -->
+	</div>
+	
+	<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">资产详细描述</h4>
+			    </div>
+			    <div class="modal-body">
+			     	
+      			</div>
+      			<div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+			    </div>
 			</div>
 		</div>
 	</div>
@@ -102,17 +119,19 @@
 	<table class="table table-hover table-bordered">
 		<tr>
 			<th>资产名称</th>
+			<th>资产数量</th>
 			<th>发布时间</th>
 			<th>发行机构/人</th>
 			<th>操作</th>
 		</tr>
 		<%for(var i in items){%> 
 		<tr data-id="<%= items[i].id%>">
-			<td><%= items[i].name%></td>
+			<td><%= items[i].assets_name%></td>
+			<td><%= items[i].assets_num%></td>
 			<td><%= items[i].time%></td>
-			<td><%= items[i].owner%></td>
+			<td><%= items[i].assets_id%></td>
 			<td>
-				<a href="<%= items[i].detailUrl%>" class="btn btn-info" target="_blank">详情</a>
+				<button type="button" class="btn btn-watchDesc btn-info" data-toggle="modal" data-target="#descModal" data-desc="<%= items[i].assets_desc%>">详情</a>
 			</td>
 		</tr>
 		<%}%>
