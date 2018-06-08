@@ -39,7 +39,7 @@ $(function(){
 		// 	var self = this;
 		// 	//ajax请求可购买资产返回data
 		// 	// $.ajax({
-		// 	// 	url: 'http://192.168.199.62:5000/api/personal_assets',
+		// 	// 	url: window.url + '/api/personal_assets',
 		// 	// 	type: 'GET',
 		// 	// 	dataType: 'json',
 		// 	// 	data: {
@@ -114,7 +114,7 @@ $(function(){
 			var self = this;
 			//ajax请求可购买资产返回data
 			$.ajax({
-				url: 'http://192.168.199.62:5000/api/asset_overview',
+				url: window.url + '/api/asset_overview',
 				type: 'GET',
 				dataType: 'json',
 				data: {

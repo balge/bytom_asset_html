@@ -3,15 +3,15 @@ $(function(){
 		init: function(){
 			var self = this;
 			self.userName = self.getCookie('username');
-			// self.pageSize =10;
 			self.loginStatus();
-			// self.renderAsset();
+			self.getUserInfo();
+			self.renderPurchasedAsset();
+			self.renderPublishedAsset();
+			self.indentUser();
 			self.logout();
 		},
 		loginStatus: function(){
 			var self = this;
-			//ajax请求登录返回loginStatus,保存cookie
-			// self.setCookie('username', 'wuchengba', 1);//模拟登录
 			if(self.userName){
 				var loginStatus = true;
 			}else{
@@ -23,6 +23,132 @@ $(function(){
 		        loginStatus: loginStatus//已经登录
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
+		},
+		getUserInfo: function(){
+			var self = this;
+			$.ajax({
+				url: window.url + '/api/user',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					email: self.getCookie('email')
+				},
+				success: function(res){
+					console.log(res)
+					if(res.code == 200 && res.data){
+						var data = res.data;
+						$.each(data, function(k, v) {
+							if(k == 'last_seen'){
+								var year = new Date(v).getFullYear();
+								var month = parseInt(new Date(v).getMonth()) >= 9 ? new Date(v).getMonth() + 1 : '0' + parseInt(new Date(v).getMonth() + 1);
+								var day = new Date(v).getDay() >= 10 ? new Date(v).getDay() : '0' + new Date(v).getDay();
+								var rtime = year + '-' + month + '-' + day;
+								data.rtime = rtime;
+							}else if(k == 'member_since'){
+								var times = new Date().getTime() - new Date(v).getTime();
+								var day = Math.floor(times / 1000 / 3600 / 24);
+								var hour = Math.floor((times - day * 24 * 3600 * 1000) / 3600 / 1000);
+								var minute = Math.floor((times - day * 24 * 3600 * 1000 - hour * 3600) / 60 / 1000);
+								if(day > 0){
+									data.ltime = day + '天';
+								}else if(hour > 0){
+									data.ltime = hour + '小时';
+								}else if(minute > 0) {
+									data.ltime = minute + '分钟';
+								} else {
+									data.ltime = '几秒';
+								}
+							}
+						});
+						var infoHtml = template($('#userInfoTpl').html(), {
+							items: data
+					    });
+					    $('.user-info').html(infoHtml);
+					}else{
+						$('.user-info').html('<h4>获取个人信息错误，请稍后重试～～</h4>')
+					}
+				},
+				error: function(){
+					$('.user-info').html('<h4>获取个人信息错误，请稍后重试～～</h4>')
+				}
+			})
+
+		},
+		renderPurchasedAsset: function(pageNum,isReRender){
+			var self = this;
+			$.ajax({
+				url: window.url + '/api/personal_assets',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					"email": self.getCookie('email'),
+					"asset_type": 1
+				},
+				success: function(res){
+					console.log(JSON.parse(res.data))
+					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
+						var assetHtml = template($('#assetPurchasedTpl').html(), {
+							username: self.userName,
+							items: JSON.parse(res.data)
+					    });
+					    $('.user-purchased').html(assetHtml);
+					    self.watchDesc();
+					}else{
+						$('.user-purchased').html('<h4>'+ self.userName +'暂时无购买的资产～～</h4>')
+					}
+				},
+				error: function(){
+					$('.asset-table').html('<h4>'+ self.userName +'暂时无购买的资产～～</h4>')
+				}
+			})
+
+			
+		 //    if(!isReRender || isReRender != true){
+			// 	self.paginator(data.data.length,1);
+			// }
+		},
+		renderPublishedAsset: function(pageNum,isReRender){
+			var self = this;
+			$.ajax({
+				url: window.url + '/api/get_define_assets',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					email: self.getCookie('email'),
+					status: 3
+				},
+				success: function(res){
+					console.log(JSON.parse(res.data))
+					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
+						var assetHtml = template($('#assetPublishedTpl').html(), {
+							username: self.userName,
+							items: JSON.parse(res.data)
+					    });
+					    $('.user-published').html(assetHtml);
+					    self.watchDesc();
+					}else{
+						$('.user-published').html('<h4>'+ self.userName +'暂时已发布的资产～～</h4>')
+					}
+				},
+				error: function(){
+					$('.user-published').html('<h4>'+ self.userName +'暂时已发布的资产～～</h4>')
+				}
+			})
+		},
+		indentUser: function(){
+			var self = this;
+			$('body').on('click', '.btn-indent', function(event) {
+				event.preventDefault();
+				
+			});
+		},
+		watchDesc: function(){
+			var self = this;
+			$('.btn-watchDesc').on('click', function(event) {
+				event.preventDefault();
+				var desc = $(this).attr('data-desc');
+				$('#descModal .modal-body').html(desc);
+			});
 		},
 		logout: function(){
 			var self = this;

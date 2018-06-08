@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./css/header.css">
+	<link rel="stylesheet" href="./css/user_center.css">
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -34,13 +35,45 @@
 		</div>
 	</div>
 	<div class="container">
-		
+		<div class="col-sm-12 user-box">
+			<div class="user-info">
+				
+			</div>
+		</div>
+		<div class="col-sm-12 user-box">
+			<div class="user-purchased">
+				
+			</div>
+		</div>
+		<div class="col-sm-12 user-box">
+			<div class="user-published">
+				
+			</div>
+		</div>
 	</div>
+	<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">资产详细描述</h4>
+			    </div>
+			    <div class="modal-body">
+			     	
+      			</div>
+      			<div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<div class="dialog-box"></div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/template.js"></script>
 <script src="./js/user_center.js"></script>
+<script src="./js/apiUrl.js"></script>
 <!-- template测试 -->
 <script id="navTpl" type="text/html">
     <ul class="nav navbar-nav navbar-left">
@@ -73,4 +106,78 @@
         <% } %>
 	</ul>
 </script>
+
+<script type="text/html" id="userInfoTpl">
+	<p class="name"><%= items.username%></p>
+	<p class="email">注册邮箱：<%= items.address%></p>
+	<p class="rtime">注册时间：<%= items.rtime%></p>
+	<p class="ltime">上次登陆时间：<%= items.ltime%>前</p>
+	<% if(!items.txid){%>
+	<input type="button" name="" value="实名认证" data-loading-text="实名认证中..." class="btn btn-info btn-indent" />
+	<%}else{%>
+	<input type="button" name="" value="已实名认证" class="btn btn-success" />
+	<%}%>
+</script>
+
+<script id="assetPurchasedTpl" type="text/html">
+	<div class="asset-block">
+		<h3><%=username%>已购买资产</h3>
+		<div class="asset-table">
+			<table class="table table-hover table-bordered">
+				<tr>
+					<th>资产名称</th>
+					<th>资产数量</th>
+					<th>发布时间</th>
+					<th>发行机构/人</th>
+					<th>操作</th>
+				</tr>
+				<%for(var i in items){%> 
+				<tr data-id="<%= items[i].id%>">
+					<td><%= items[i].assets_name%></td>
+					<td><%= items[i].assets_num%></td>
+					<td><%= items[i].time%></td>
+					<td><%= items[i].assets_id%></td>
+					<td>
+						<button type="button" class="btn btn-watchDesc btn-info" data-toggle="modal" data-target="#descModal" data-desc="<%= items[i].assets_desc%>">详情</a>
+					</td>
+				</tr>
+				<%}%>
+			</table>
+		</div>
+	</div>
+</script>
+
+<script id="assetPublishedTpl" type="text/html">
+	<div class="asset-block">
+		<h3><%=username%>已发布资产</h3>
+		<div class="asset-table">
+			<table class="table table-hover table-bordered">
+				<tr>
+					<th>资产名称</th>
+					<th>资产数量</th>
+					<th>资产描述</th>
+					<th>发布时间</th>
+					<th>价格</th>
+					<th>操作</th>
+				</tr>
+				<%for(var i in items){%> 
+				<tr data-id="<%= items[i].id%>" data-itemid="<%= items[i].assets_id%>">
+					<td><%= items[i].assets_name%></td>
+					<td><%= items[i].assets_num%></td>
+					<td class="desc-wrap">
+						<p class="desc" style="display:none;"><%= items[i].assets_desc%></p>
+						<p class="showdesc" title="<%= items[i].assets_desc%>"><% if(items[i].assets_desc.length >= 10){%><%= items[i].assets_desc.substr(0,10)%>...<%}else{%><%= items[i].assets_desc%><%}%></p>
+					</td>
+					<td><%= items[i].time%></td>
+					<td><% if(items[i].price){%><%= items[i].price%><% }else{ %>/<% }%></td>
+					<td>
+						<button type="button" class="btn btn-watchDesc btn-info" data-toggle="modal" data-target="#descModal" data-desc="<%= items[i].assets_desc%>">详情</a>
+					</td>
+				</tr>
+				<%}%>
+			</table>
+		</div>
+	</div>
+</script>
+
 </html>

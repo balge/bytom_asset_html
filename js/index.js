@@ -55,7 +55,7 @@ $(function(){
 			var self = this;
 			//ajax请求可购买资产返回data
 			$.ajax({
-				url: 'http://192.168.199.62:5000/api/assets',
+				url: window.url + '/api/assets',
 				type: 'GET',
 				dataType: 'json',
 				data: {
@@ -109,7 +109,7 @@ $(function(){
 						"email": self.getCookie('email')
 					}
 					$.ajax({
-						url: 'http://192.168.199.62:5000/api/assets_purchase',
+						url: window.url + '/api/assets_purchase',
 						type: 'POST',
 						dataType: 'json',
 						contentType: 'application/json',

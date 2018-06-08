@@ -235,7 +235,7 @@ $(function(){
 			// 	console.log(JSON.stringify(params))
 			// 	if(params.length > 0){//有数据选中后提交
 			// 		$.ajax({
-			// 	       	url: 'http://192.168.199.62:5000/api/assets_define',
+			// 	       	url: window.url + '/api/assets_define',
 			// 			type: 'POST',
 			// 			dataType: 'json',
 			// 			contentType: 'application/json',
@@ -264,7 +264,7 @@ $(function(){
 			    	email: self.getCookie('email')
 				};
 				$.ajax({
-			       	url: 'http://192.168.199.62:5000/api/assets_define',
+			       	url: window.url + '/api/assets_define',
 					type: 'POST',
 					dataType: 'json',
 					contentType: 'application/json',

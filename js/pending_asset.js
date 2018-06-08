@@ -38,7 +38,7 @@ $(function(){
 		renderAsset: function(){
 			var self = this;
 			$.ajax({
-				url: 'http://192.168.199.62:5000/api/get_define_assets',
+				url: window.url + '/api/get_define_assets',
 				type: 'GET',
 				dataType: 'json',
 				data: {
@@ -197,7 +197,7 @@ $(function(){
 				};
 				console.log(JSON.stringify(params))
 				$.ajax({
-				    url: 'http://192.168.199.62:5000/api/assets_audit',
+				    url: window.url + '/api/assets_audit',
 					type: 'POST',
 					dataType: 'json',
 					contentType: 'application/json',
@@ -237,7 +237,7 @@ $(function(){
 				};
 				console.log(JSON.stringify(params))
 				$.ajax({
-				    url: 'http://192.168.199.62:5000/api/assets_issue',
+				    url: window.url + '/api/assets_issue',
 					type: 'POST',
 					dataType: 'json',
 					contentType: 'application/json',

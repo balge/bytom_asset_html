@@ -40,7 +40,7 @@ $(function(){
 					password: $('#password').val()
 				}
 				$.ajax({
-					url: 'http://192.168.199.62:5000/api/login',
+					url: window.url + '/api/login',
 					type: 'POST',
 					dataType: 'json',
 					contentType: 'application/json',

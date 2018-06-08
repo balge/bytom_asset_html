@@ -37,7 +37,7 @@ $(function(){
 		renderAsset: function(pageNum,isReRender){
 			var self = this;
 			$.ajax({
-				url: 'http://192.168.199.62:5000/api/personal_assets',
+				url: window.url + '/api/personal_assets',
 				type: 'GET',
 				dataType: 'json',
 				data: {

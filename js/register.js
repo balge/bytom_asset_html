@@ -92,7 +92,7 @@ $(function(){
 					confirmPassword: $('#confirmPassword').val()
 				}
 				$.ajax({
-					url: 'http://192.168.199.62:5000/api/register',
+					url: window.url + '/api/register',
 					type: 'POST',
 					dataType: 'json',
 					contentType: 'application/json',
