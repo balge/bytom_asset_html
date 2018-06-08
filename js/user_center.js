@@ -3,7 +3,14 @@ $(function(){
 		init: function(){
 			var self = this;
 			self.userName = self.getCookie('username');
+			self.status = false;
+			self.indentStatusArr = [];
+			var localIndentStatus = self.getItem('indentValue');
+			if(localIndentStatus){
+				self.indentStatusArr = self.indentStatusArr.concat(JSON.parse(localIndentStatus));
+			}
 			self.loginStatus();
+			self.indentStatus();
 			self.getUserInfo();
 			self.renderPurchasedAsset();
 			self.renderPublishedAsset();
@@ -23,6 +30,18 @@ $(function(){
 		        loginStatus: loginStatus//已经登录
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
+		},
+		indentStatus: function(){
+			var self = this;
+			var useremail = self.getCookie('email');
+			$.each(self.indentStatusArr,function(index, el) {
+				var email = el.email;
+				var status = el.status;
+				if(useremail == email && status == true){
+					self.status = true;
+					return false;
+				}
+			});
 		},
 		getUserInfo: function(){
 			var self = this;
@@ -61,7 +80,9 @@ $(function(){
 							}
 						});
 						var infoHtml = template($('#userInfoTpl').html(), {
-							items: data
+							items: data,
+							email: self.getCookie('email'),
+							status: self.status
 					    });
 					    $('.user-info').html(infoHtml);
 					}else{
@@ -171,7 +192,13 @@ $(function(){
 								$('#indentModal').modal('hide');
 							    $('#indentModal').on('hidden.bs.modal',function() {
 							         $('.indentModal').html('');
-							    })
+							    });
+							    var value = {
+							    	email: self.getCookie('email'),
+							    	status: true
+							    };
+							    self.indentStatusArr.push(value);
+							    self.setItem('indentValue', JSON.stringify(self.indentStatusArr));
 							}
 						},
 						error: function(){
