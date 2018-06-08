@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./css/header.css">
 	<link rel="stylesheet" href="./css/user_center.css">
+	<link rel="stylesheet" href="./css/fileup.css">
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -67,13 +68,15 @@
 			</div>
 		</div>
 	</div>
-	<div class="dialog-box"></div>
+	<div class="indentModal"></div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/template.js"></script>
 <script src="./js/user_center.js"></script>
+<script src="./js/validate.js"></script>
 <script src="./js/apiUrl.js"></script>
+<script src="./js/fileinput.min.js"></script>
 <!-- template测试 -->
 <script id="navTpl" type="text/html">
     <ul class="nav navbar-nav navbar-left">
@@ -176,6 +179,42 @@
 				</tr>
 				<%}%>
 			</table>
+		</div>
+	</div>
+</script>
+
+<script id="indentModalTpl" type="text/html">
+	<div class="modal fade" id="indentModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">实名认证信息提交</h4>
+			    </div>
+			    <div class="modal-body">
+			     	<form id="indentForm">
+			     		<div class="form-group">
+	                        <label for="name">姓名</label>
+	                        <input type="text" name="name" class="form-control" id="name" placeholder="姓名" />
+	                	</div>
+	                	<div class="form-group">
+	                        <label for="num">身份证号码</label>
+	                        <input type="text" name="cardid" class="form-control" id="cardid" placeholder="身份证号码" />
+	                	</div>
+	                	<div class="form-group">
+	                        <label for="price">身份证正面</label>
+	                        <input type="file" name="cardface1" class="form-control" id="cardface1" />
+	                	</div>
+	                	<div class="form-group">
+	                        <label for="desc">身份证反面</label>
+	                        <input type="file" name="cardface2" class="form-control" id="cardface2" />
+	                	</div>
+	                	<div style="text-align: right;">
+	                		<input type="button" value="实名认证" class="btn btn-info btn-sureIndent" />
+	                	</div>
+					</form>
+	  			</div>
+			</div>
 		</div>
 	</div>
 </script>

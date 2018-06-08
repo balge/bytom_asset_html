@@ -50,7 +50,7 @@ $(function(){
 					// 	withCredentials: true
 					// },
 					success: function(res){
-						console.log(res)
+						// console.log(res)
 						if(res.code == 200) {
 							if(res.data){
 								self.setCookie('username', res.data.username, 5);

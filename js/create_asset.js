@@ -74,9 +74,9 @@ $(function(){
 		                        message: '资产数量不得为空'
 		                    },
 		                    regexp: {
-	                            regexp: /^[0-9]+$/,
-	                            message: '资产数量只能是数字'
-	                        }
+					            regexp: "^[1-9][0-9]*$",
+					            message: '资产数量必须为大于0的正整数'
+					        }
 		                }
 		            },
 		            price: {
@@ -85,9 +85,9 @@ $(function(){
 		                        message: '资产数量不得为空'
 		                    },
 		                    regexp: {
-	                            regexp: /^[0-9.]+$/,
-	                            message: '资产价格只能是数字'
-	                        }
+					            regexp: "^[0-9.]*$",
+					            message: '资产数量必须为大于0的数字'
+					        }
 		                }
 		            }
 		        }
@@ -232,7 +232,7 @@ $(function(){
 			// 		}
 					
 			// 	});
-			// 	console.log(JSON.stringify(params))
+				// console.log(JSON.stringify(params))
 			// 	if(params.length > 0){//有数据选中后提交
 			// 		$.ajax({
 			// 	       	url: window.url + '/api/assets_define',
@@ -244,7 +244,7 @@ $(function(){
 			// 			// 	withCredentials: true
 			// 			// },
 			// 	        success: function(res){
-			// 	      		console.log(res)
+				      		// console.log(res)
 			// 	        }
 			// 		});
 			// 	}

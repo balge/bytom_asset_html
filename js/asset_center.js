@@ -40,9 +40,9 @@ $(function(){
 		                        message: '购买数量不得为空'
 		                    },
 		                    regexp: {
-	                            regexp: /^[0-9]+$/,
-	                            message: '购买数量只能是数字'
-	                        }
+					            regexp: "^[1-9][0-9]*$",
+					            message: '购买数量必须为大于0的正整数'
+					        }
 		                }
 		            }
 		        }
@@ -60,7 +60,7 @@ $(function(){
 					// pageSize: self.pageSize
 				},
 				success: function(res){
-					console.log(JSON.parse(res.data))
+					// console.log(JSON.parse(res.data))
 					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
 						var assetHtml = template($('#assetTpl').html(), {
 							items: JSON.parse(res.data)
@@ -116,7 +116,7 @@ $(function(){
 						// 	withCredentials: true
 						// },
 						success: function(res){
-							console.log(res)
+							// console.log(res)
 							if(res.code == 200){
 								self.renderAsset();
 								self.alertDialog('购买成功', 'success');

@@ -34,7 +34,7 @@ $(function(){
 					email: self.getCookie('email')
 				},
 				success: function(res){
-					console.log(res)
+					// console.log(res)
 					if(res.code == 200 && res.data){
 						var data = res.data;
 						$.each(data, function(k, v) {
@@ -85,7 +85,7 @@ $(function(){
 					"asset_type": 1
 				},
 				success: function(res){
-					console.log(JSON.parse(res.data))
+					// console.log(JSON.parse(res.data))
 					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
 						var assetHtml = template($('#assetPurchasedTpl').html(), {
 							username: self.userName,
@@ -98,7 +98,7 @@ $(function(){
 					}
 				},
 				error: function(){
-					$('.asset-table').html('<h4>'+ self.userName +'暂时无购买的资产～～</h4>')
+					$('.user-purchased').html('<h4>'+ self.userName +'暂时无购买的资产～～</h4>')
 				}
 			})
 
@@ -118,7 +118,7 @@ $(function(){
 					status: 3
 				},
 				success: function(res){
-					console.log(JSON.parse(res.data))
+					// console.log(JSON.parse(res.data))
 					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
 						var assetHtml = template($('#assetPublishedTpl').html(), {
 							username: self.userName,
@@ -139,8 +139,100 @@ $(function(){
 			var self = this;
 			$('body').on('click', '.btn-indent', function(event) {
 				event.preventDefault();
-				
+				var indentModalHtml = template($('#indentModalTpl').html());
+				if($('.indentModal').html() == ''){
+					$('.indentModal').html(indentModalHtml);
+				    $("#cardface1").fileinput({showCaption: false, dropZoneEnabled: false, showUpload:false, showRemove: false, showPreview: true, maxFileCount: 1, autoReplace: true});
+				    $("#cardface2").fileinput({showCaption: false, dropZoneEnabled: false, showUpload:false, showRemove: false, showPreview: true, maxFileCount: 1, autoReplace: true});
+				    self.validateForm();
+				}
+				$('#indentModal').modal();
 			});
+			$('body').on('click', '.btn-sureIndent', function(event) {
+				event.preventDefault();
+				var bootstrapValidator = $('#indentForm').data('bootstrapValidator');
+				bootstrapValidator.validate();
+				if(bootstrapValidator.isValid()){
+					var params = {
+						'email': self.getCookie('email'),
+						'id_card': $('#cardid').val(),
+						'name': $('#name').val(),
+						'pic1': $('#cardface1').parents('.file-input').find('.file-preview-image').attr('src'),
+						'pic2': $('#cardface2').parents('.file-input').find('.file-preview-image').attr('src'),
+					}
+					$.ajax({
+						url: window.url + '/api/identification',
+						type: 'POST',
+						dataType: 'json',
+						contentType: 'application/json',
+						data: JSON.stringify(params),
+						success: function(res){
+							if(res.code == 200){
+								$('#indentModal').modal('hide');
+							    $('#indentModal').on('hidden.bs.modal',function() {
+							         $('.indentModal').html('');
+							    })
+							}
+						},
+						error: function(){
+							//失败情况处理
+						}
+					});
+				}
+			});
+		},
+		validateForm: function(){
+			var self = this;
+			$('#indentForm').bootstrapValidator({
+        		feedbackIcons: {
+		            valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+		        },
+		        fields: {
+		            name: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '姓名不得为空'
+		                    },
+		                    regexp: {
+					            regexp: "^[\u4e00-\u9fa5]*$",
+					            message: "姓名只支持中文"
+					        },
+		                    stringLength: {
+		                        min: 2,
+		                        max: 4,
+		                        message: '姓名在2-4个字符之间'
+		                    }
+		                }
+		            },
+		            cardid: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '身份证号码不得为空'
+		                    },
+		                    regexp: {
+					            regexp: /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/,
+					            message: "请输入正确格式的身份证号码"
+					        }
+		                }
+		            },
+		            cardface1: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '请上传身份证正面'
+		                    }
+		                }
+		            },
+		            cardface2: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '请上传身份证反面'
+		                    }
+		                }
+		            }
+		        }
+			})
 		},
 		watchDesc: function(){
 			var self = this;

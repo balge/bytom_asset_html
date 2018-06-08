@@ -45,7 +45,7 @@ $(function(){
 					email: self.getCookie('email'),
 				},
 				success: function(res){
-					console.log(JSON.parse(res.data))
+					// console.log(JSON.parse(res.data))
 					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
 						var assetHtml = template($('#assetTpl').html(), {
 							items: JSON.parse(res.data).filter(function(a){return a.status !==3 })
@@ -180,7 +180,7 @@ $(function(){
 			
 			$('body').on('click', '.btn-pending', function(event) {
 				event.preventDefault();
-				self.index = parseInt($(this).parents('.item').attr('data-id'));
+				self.index = parseInt($(this).parents('.item').attr('data-index'));
 				var index = self.index + 1;
 				var modalHtml = template($('#modalTpl').html(), {
 			        tips: '确定审批第' + index + '条资产？',
@@ -195,7 +195,7 @@ $(function(){
 					"assets_name": $('.item').eq(self.index).find('.name').text(),
 					"email": self.getCookie('email')
 				};
-				console.log(JSON.stringify(params))
+				// console.log(JSON.stringify(params))
 				$.ajax({
 				    url: window.url + '/api/assets_audit',
 					type: 'POST',
@@ -235,7 +235,7 @@ $(function(){
 					"assets_name": $('.item').eq(self.index).find('.name').text(),
 					"email": self.getCookie('email')
 				};
-				console.log(JSON.stringify(params))
+				// console.log(JSON.stringify(params))
 				$.ajax({
 				    url: window.url + '/api/assets_issue',
 					type: 'POST',
