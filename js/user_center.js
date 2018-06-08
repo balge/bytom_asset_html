@@ -174,6 +174,7 @@ $(function(){
 				var bootstrapValidator = $('#indentForm').data('bootstrapValidator');
 				bootstrapValidator.validate();
 				if(bootstrapValidator.isValid()){
+					$('.btn-indent').button('loading');
 					var params = {
 						'email': self.getCookie('email'),
 						'id_card': $('#cardid').val(),
@@ -189,6 +190,7 @@ $(function(){
 						data: JSON.stringify(params),
 						success: function(res){
 							if(res.code == 200){
+								$('.btn-indent').val('实名认证成功').removeClass('disabled').removeAttr('disabled');
 								$('#indentModal').modal('hide');
 							    $('#indentModal').on('hidden.bs.modal',function() {
 							         $('.indentModal').html('');
