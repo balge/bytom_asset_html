@@ -6,6 +6,8 @@ $(function(){
 			self.pageSize =10;
 			self.loginStatus();
 			self.renderAsset();
+		    self.buyAsset();
+		    self.watchDesc();
 			self.logout();
 		},
 		loginStatus: function(){
@@ -23,79 +25,140 @@ $(function(){
 		    });
 		    $('.navbar-collapse').html(navBarHtml);
 		},
+		validateForm: function(){
+			var self = this;
+			$('#buyForm').bootstrapValidator({
+        		feedbackIcons: {
+		            valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+		        },
+		        fields: {
+		            buyNum: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '购买数量不得为空'
+		                    },
+		                    regexp: {
+	                            regexp: /^[0-9]+$/,
+	                            message: '购买数量只能是数字'
+	                        }
+		                }
+		            }
+		        }
+			})
+		},
 		renderAsset: function(pageNum,isReRender){
 			var self = this;
 			//ajax请求可购买资产返回data
-			// $.ajax({
-			// 	url: '',
-			// 	type: 'GET',
-			// 	dataType: 'json',
-			// 	data: {
-			// 		pageNum: pageNum || 1,
-			// 		pageSize: self.pageSize
-			// 	}
-			// 	success: function(){
+			$.ajax({
+				url: 'http://192.168.199.62:5000/api/assets',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					// pageNum: pageNum || 1,
+					// pageSize: self.pageSize
+				},
+				success: function(res){
+					console.log(JSON.parse(res.data))
+					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
+						var assetHtml = template($('#assetTpl').html(), {
+							items: JSON.parse(res.data)
+					    });
+					    $('.asset-table').html(assetHtml);
+					 //    if(!isReRender || isReRender != true){
+						// 	self.paginator(res.data.length,1);
+						// }
+					}else{
+						$('.asset-table').html('<h4>暂时无可购买资产～～</h4>')
+					}
+				},
+				error: function(){
+					$('.asset-table').html('<h4>暂时无可购买资产～～</h4>')
+				}
+			})
 
-			// 	},
-			// 	error: function(){
+			
+		},
+		buyAsset: function(){
+			var self = this;
+			var index = 0;
+			$('body').on('click', '.btn-buyAsset', function(event) {
+				event.preventDefault();
+				index = $(this).parents('tr.item').attr('data-index');
+				var BuyModalHtml = template($('#buyModalTpl').html());
+			    $('.buyModal').html(BuyModalHtml);
+			    self.validateForm();
+				$('#buyModal').modal();
+			});
+			$('body').on('click', '.btn-sureBuy', function(event) {
+				event.preventDefault();
+				$('.dialog-box').removeClass('show');//立即清除弹窗
+				$('.alert.alert-dismissible').alert('close');//立即清除弹窗
+				var bootstrapValidator = $('#buyForm').data('bootstrapValidator');
+				bootstrapValidator.validate();
+				if(bootstrapValidator.isValid()){
+					var params = {
+						"assets_id": $('tr.item').eq(index).find('.owner').attr('data-data'),
+						"assets_name": $('tr.item').eq(index).find('.name').attr('data-data'),
+						"assets_num": parseInt($('#buyNum').val()),
+						"id": $('tr.item').eq(index).attr('data-itemid'),
+						"email": self.getCookie('email')
+					}
+					$.ajax({
+						url: 'http://192.168.199.62:5000/api/assets_purchase',
+						type: 'POST',
+						dataType: 'json',
+						contentType: 'application/json',
+						data: JSON.stringify(params),
+						// crossDomain: true,
+						// xhrFields: {
+						// 	withCredentials: true
+						// },
+						success: function(res){
+							console.log(res)
+							if(res.code == 200){
+								self.renderAsset();
+								self.alertDialog('购买成功', 'success');
+							}else{
+								self.alertDialog('购买失败', 'danger');
+							}
+						},
+						error: function(){
+							//失败情况处理
+							self.alertDialog('购买失败', 'danger');
+						}
+					});
+					$('#buyModal').modal('hide');
+				    $('#buyModal').on('hidden.bs.modal',function() {
+				         $('.buyModal').html('');
+				    })
+				}
+			});
+		},
+		watchDesc: function(){
+			var self = this;
+			$('body').on('click', '.btn-watchDesc',function(event) {
+				event.preventDefault();
+				var desc = $(this).attr('data-desc');
+				$('#descModal .modal-body').html(desc);
+			});
+		},
 
-			// 	}
-			// })
-			var data = {
-				"code": 200,
-				"msg": '请求成功',
-				"pageNum": 1,
-				"pageSize": 10,
-				data: [{
-					"name": "btm",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm2",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm3",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm4",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				},{
-					"name": "btm5",
-					"owner": "bytom",
-					"time": "2018/06/03",
-					"price": 1000,
-					"detailUrl": "http://www.baidu.com",//详情地址
-					"orderUrl": "http://www.google.com",//购买地址
-					"id": 100//产品id
-				}]
-			};
-
-			var assetHtml = template($('#assetTpl').html(), {
-				items: data.data
+		alertDialog: function(text, type){
+			var self = this;
+			var alertHtml = template($('#alertTpl').html(), {
+		        text: text,
+		        type: type
 		    });
-		    $('.asset-table').html(assetHtml);
-		    if(!isReRender || isReRender != true){
-				self.paginator(data.data.length,1);
-			}
+		    $('.dialog-box').html(alertHtml).addClass('show');
+		    $('.alert.alert-dismissible').alert();
+		    setTimeout(function(){
+		    	$('.dialog-box').removeClass('show');
+		    },2000);
+		    setTimeout(function(){
+		    	$('.alert.alert-dismissible').alert('close');
+		    },2300);
 		},
 		paginator: function(total,current){
 			var self = this;

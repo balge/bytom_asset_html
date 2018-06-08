@@ -113,34 +113,29 @@ $(function(){
 		renderSurveyBlock: function(){
 			var self = this;
 			//ajax请求可购买资产返回data
-			// $.ajax({
-			// 	url: '',
-			// 	type: 'GET',
-			// 	dataType: 'json',
-			// 	data: {
-					// email: self.getCookie('email')
-			// 	}
-			// 	success: function(){
-
-			// 	},
-			// 	error: function(){
-
-			// 	}
-			// })
-			var data = {
-				"code": 200,
-				"msg": '请求成功',
-				"data": {
-					"release": 100,
-					"owner": 88,
-					"examine": 20
+			$.ajax({
+				url: 'http://192.168.199.62:5000/api/asset_overview',
+				type: 'GET',
+				dataType: 'json',
+				data: {
+					email: self.getCookie('email')
+				},
+				success: function(res){
+					if(res.code == 200 && res.data) {
+						var data = JSON.parse(res.data);
+						var surveyHtml = template($('#surveyTpl').html(), {
+							items: data
+					    });
+					    $('.survey-list').html(surveyHtml);
+					}else{
+						$('.survey-list').html('<h4>数据异常，请稍后再试～～</h4>')
+					}
+				},
+				error: function(){
+					$('.survey-list').html('<h4>数据异常，请稍后再试～～</h4>');
 				}
-			};
-
-			var surveyHtml = template($('#surveyTpl').html(), {
-				items: data.data
-		    });
-		    $('.survey-list').html(surveyHtml);
+			})
+			
 		},
 		paginator: function(total,current){
 			var self = this;

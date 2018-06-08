@@ -90,7 +90,7 @@
             </a>
         </li>
         <% }else{ %>
-		<li><a href="login.html">登陆</a></li>
+		<li><a href="login.html">登录</a></li>
         <li><a href="register.html">注册</a></li>
         <% } %>
 	</ul>
@@ -101,19 +101,19 @@
 		<div class="col-sm-4"><a href="published_asset.html">
 			<div class="survey-block block0">
 				个人发布的资产:
-				<span><%=items.release%></span>
+				<span><%=items.issue%></span>
 			</div>
 		</a></div>
 		<div class="col-sm-4"><a href="purchased_asset.html">
 			<div class="survey-block block1">
 				个人购买的资产:
-				<span><%=items.owner%></span>
+				<span><%=items.purchase%></span>
 			</div>
 		</a></div>
 		<div class="col-sm-4"><a href="pending_asset.html">
 			<div class="survey-block block2">
-				待审核的资产:
-				<span><%=items.examine%></span>
+				待审核/发布的资产:
+				<span><%=items.audited%></span>
 			</div>
 		</a></div>
 	</div>

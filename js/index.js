@@ -96,6 +96,8 @@ $(function(){
 			});
 			$('body').on('click', '.btn-sureBuy', function(event) {
 				event.preventDefault();
+				$('.dialog-box').removeClass('show');//立即清除弹窗
+				$('.alert.alert-dismissible').alert('close');//立即清除弹窗
 				var bootstrapValidator = $('#buyForm').data('bootstrapValidator');
 				bootstrapValidator.validate();
 				if(bootstrapValidator.isValid()){
