@@ -132,6 +132,7 @@
 					<th>资产数量</th>
 					<th>发布时间</th>
 					<th>发行机构/人</th>
+					<th>资产描述</th>
 					<th>操作</th>
 				</tr>
 				<%for(var i in items){%> 
@@ -140,6 +141,10 @@
 					<td><%= items[i].assets_num%></td>
 					<td><%= items[i].time%></td>
 					<td><%= items[i].assets_id%></td>
+					<td class="desc-wrap">
+						<p class="desc" style="display:none;"><%= items[i].assets_desc%></p>
+						<p class="showdesc" title="<%= items[i].assets_desc%>"><% if(items[i].assets_desc.length >= 10){%><%= items[i].assets_desc.substr(0,10)%>...<%}else{%><%= items[i].assets_desc%><%}%></p>
+					</td>
 					<td>
 						<button type="button" class="btn btn-watchDesc btn-info" data-toggle="modal" data-target="#descModal" data-desc="<%= items[i].assets_desc%>">详情</a>
 					</td>

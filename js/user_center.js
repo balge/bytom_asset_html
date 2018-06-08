@@ -41,7 +41,7 @@ $(function(){
 							if(k == 'last_seen'){
 								var year = new Date(v).getFullYear();
 								var month = parseInt(new Date(v).getMonth()) >= 9 ? new Date(v).getMonth() + 1 : '0' + parseInt(new Date(v).getMonth() + 1);
-								var day = new Date(v).getDay() >= 10 ? new Date(v).getDay() : '0' + new Date(v).getDay();
+								var day = new Date(v).getDate() >= 10 ? new Date(v).getDate() : '0' + new Date(v).getDate();
 								var rtime = year + '-' + month + '-' + day;
 								data.rtime = rtime;
 							}else if(k == 'member_since'){
