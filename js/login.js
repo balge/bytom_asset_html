@@ -3,6 +3,7 @@ $(function(){
 		init: function(){
 			var self = this;
 			self.loginIn();
+			self.goRegister();
 		},
 		loginIn: function(){
 			var self = this;
@@ -76,6 +77,18 @@ $(function(){
 					}
 				});
 				
+			});
+		},
+		goRegister: function(){
+			var self = this;
+			$('.register').on('click', function(event) {
+				event.preventDefault();
+				var redirect_uri = self.getQueryString('redirect_uri');
+			    if(redirect_uri) {
+				    window.location.href = 'register.html?redirect_uri=' + redirect_uri;
+			    }else{
+				    window.location.href = 'register.html';
+			    }
 			});
 		},
 		alertDialog: function(text, type){

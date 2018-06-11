@@ -16,6 +16,8 @@ $(function() {
 				var loginStatus = true;
 			} else {
 				var loginStatus = false;
+				window.location.href = 'login.html';
+				return false;
 			}
 			var navBarHtml = template($('#navTpl').html(), {
 				loginStatus: loginStatus //已经登录

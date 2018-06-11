@@ -1,0 +1,183 @@
+body {
+  background-color: #F9F9F9;
+}
+.detail-wrap {
+  width: 1200px;
+  margin: 0 auto;
+}
+.detail-wrap .crumbs ul {
+  height: 45px;
+  padding: 0;
+  overflow: hidden;
+  margin: 0;
+}
+.detail-wrap .crumbs li {
+  display: inline-block;
+  height: 45px;
+  line-height: 45px;
+}
+.detail-wrap .crumbs li a {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+}
+.detail-wrap .crumbs li a:hover {
+  color: #15aafb;
+}
+.detail-wrap .detail-box .dpart .dpart_left {
+  float: left;
+  width: 960px;
+  height: 270px;
+  background-color: #fff;
+  padding: 0 20px;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart01 {
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  border-bottom: 1px dashed #eee;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart01p {
+  float: left;
+  height: 48px;
+  line-height: 48px;
+  width: 600px;
+  font-size: 16px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 {
+  overflow: hidden;
+  width: 100%;
+  height: 222px;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart02_left {
+  width: 290px;
+  height: 222px;
+  float: left;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_limg {
+  display: block;
+  margin: 0 auto;
+  margin-top: 28px;
+  height: 76px;
+  width: 66px;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_lp {
+  width: 290px;
+  text-align: center;
+  font-size: 12px;
+  color: #9a9a9a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 40px;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart02_right {
+  width: 630px;
+  height: 222px;
+  float: left;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_rp {
+  width: 422px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #333;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_rp i {
+  font-style: normal;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_rp_s1 {
+  font-weight: bold;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_rp_s2 {
+  color: #f7ab00;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_rp_s3 {
+  font-size: 18px;
+}
+.detail-wrap .detail-box .dpart .dpart_left .dpart02 .dpart_ra {
+  display: block;
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 3px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  background-color: #15aafb;
+  margin-top: 20px;
+  text-decoration: none;
+}
+.detail-wrap .detail-box .dpart .dpart_right {
+  float: right;
+  width: 232px;
+  height: 270px;
+  background-color: #fff;
+}
+.detail-wrap .detail-box .dpart .dpart_right .dpart03 {
+  width: 232px;
+  text-align: center;
+  font-size: 16px;
+  color: #484848;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 20px;
+}
+.detail-wrap .detail-box .dpart .dpart_right .dpart_limg {
+  display: block;
+  margin: 0 auto;
+  margin-top: 28px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  margin-bottom: 40px;
+}
+.detail-wrap .detail-box .dpart .dpart_right .tc_jiedan02_l_p03 {
+  width: 242px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: #999;
+  padding-top: 15px;
+  text-align: center;
+}
+.detail-wrap .detail-box .dpart-tabs {
+  background-color: #fff;
+  margin-top: 8px;
+}
+.detail-wrap .detail-box .dpart-tabs .tab-nav {
+  height: 50px;
+  background-color: #F9F9F9;
+}
+.detail-wrap .detail-box .dpart-tabs .tab-nav li {
+  float: left;
+  width: 150px;
+  height: 50px;
+  background-color: #eee;
+  line-height: 50px;
+  font-size: 16px;
+  text-align: center;
+  color: #333;
+  cursor: pointer;
+}
+.detail-wrap .detail-box .dpart-tabs .tab-nav li.active {
+  background-color: #fff;
+  color: #0671d7;
+}
+.detail-wrap .detail-box .dpart-tabs .tab-content {
+  padding: 20px;
+}
+.detail-wrap .detail-box .dpart-tabs td {
+  vertical-align: middle;
+}
+.detail-wrap .detail-box .dpart-tabs img {
+  display: block;
+  width: 800px;
+  margin: 0 auto;
+}

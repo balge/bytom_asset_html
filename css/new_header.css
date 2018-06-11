@@ -1,0 +1,42 @@
+.header {
+  height: 60px;
+  line-height: 55px;
+  background: url('http://www.chinadatatrading.com/images/banner_bg.png') repeat;
+}
+.header .header-main {
+  margin: 0 auto;
+  width: 1200px;
+}
+.header .header-main .header-logo {
+  display: inline-block;
+  width: 203px;
+  height: 34px;
+  vertical-align: middle;
+}
+.header .header-main .header-logo img {
+  display: block;
+  height: 34px;
+  vertical-align: top;
+}
+.header .header-main .header-right {
+  display: inline-block;
+  height: 60px;
+  float: right;
+}
+.header .header-main .header-right p {
+  font-size: 12px;
+  height: 60px;
+  line-height: 60px;
+  display: inline-block;
+  padding-left: 22px;
+  color: #ccc;
+  cursor: pointer;
+  margin: 0;
+  margin-left: 20px;
+}
+.header .header-main .header-right p.login {
+  background: url('http://www.chinadatatrading.com/images/tradingcenter_02.png') no-repeat 0px 20px;
+}
+.header .header-main .header-right p.register {
+  background: url('http://www.chinadatatrading.com/images/tradingcenter_03.png') no-repeat 0px 21px;
+}

@@ -247,8 +247,7 @@ $(function(){
 							$('.item').eq(self.index).find('.btn-publish').button('loading');
 							self.renderAsset();
 							self.alertDialog('发布成功', 'success');
-						}
-						else{
+						} else {
 							self.alertDialog('发布失败', 'danger');
 						}
 					},

@@ -3,6 +3,7 @@ $(function(){
 		init: function(){
 			var self = this;
 			self.validateForm();
+			self.goLogin();
 		},
 		validateForm: function(){
 			var self = this;
@@ -104,7 +105,13 @@ $(function(){
 					success: function(res){
 						if(res.code == 200){
 							//注册成功，跳转登录页面
-							window.location.href = 'login.html';
+							var redirect_uri = self.getQueryString('redirect_uri');
+							if(redirect_uri) {
+								window.location.href = 'login.html?redirect_uri=' + redirect_uri;
+							}else{
+								window.location.href = 'login.html';
+							}
+							
 						}else if(res.code == -1){
 							//邮箱已经注册
 							self.alertDialog('邮箱已经注册', 'danger');
@@ -119,6 +126,19 @@ $(function(){
 				});
 				
 			});
+		},
+		goLogin: function(){
+			var self = this;
+			$('.login').on('click', function(event) {
+				event.preventDefault();
+				var redirect_uri = self.getQueryString('redirect_uri');
+				if(redirect_uri) {
+					window.location.href = 'login.html?redirect_uri=' + redirect_uri;
+				}else{
+					window.location.href = 'login.html';
+				}
+			});
+			
 		},
 		alertDialog: function(text, type){
 			var self = this;
@@ -152,7 +172,14 @@ $(function(){
 		        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
 		    }
 		    return "";
-		}
+		},
+		getQueryString: function(name) { 
+			var self = this;
+	        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+	        var r = window.location.search.substr(1).match(reg); 
+	        if (r != null) return unescape(r[2]); 
+	        return null; 
+	    }
 	};
 	T.init();
 })
