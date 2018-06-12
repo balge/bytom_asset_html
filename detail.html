@@ -20,8 +20,7 @@
 		<div class="header-main">
 			<div class="header-logo"><img src="http://www.chinadatatrading.com/images/banner/Logo.svg" alt=""></div>
 			<div class="header-right">
-				<p class="login">登录</p>
-				<p class="register">注册</p>
+				
 			</div>
 		</div>
 	</div>
@@ -58,7 +57,7 @@
 								<span class="dpart_rp_s1">浏览次数：</span>3274
 							</p>
 							<p class="dpart_rp"><span class="dpart_rp_s1">发布时间：</span>2016-01-13 17:07:54</p>
-							<a href="index.html" class="dpart_ra">立即购买</a>
+							<a href="oindex.html" class="dpart_ra">立即购买</a>
 						</div>
 					</div>
 				</div>
@@ -116,5 +115,15 @@
 
 </body>
 <script src="./js/jquery.min.js"></script>
+<script src="./js/template.js"></script>
 <script src="./js/detail.js"></script>
+<script type="text/html" id="statusTpl">
+	<% if(loginStatus === true){ %>
+	<p>欢迎，<%= username%><a class="logout" href="javascript:;">退出
+    </a></p>
+	<% }else{ %>
+	<p class="login">登录</p>
+	<p class="register">注册</p>
+	<% } %>
+</script>
 </html>

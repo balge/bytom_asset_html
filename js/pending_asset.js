@@ -208,7 +208,7 @@ $(function(){
 							self.alertDialog('提交审核成功', 'success');
 						}
 						else{
-							self.alertDialog('提交审核失败', 'danger');
+							self.alertDialog(res.msg, 'danger');
 						}
 					},
 					error: function(){
@@ -248,7 +248,7 @@ $(function(){
 							self.renderAsset();
 							self.alertDialog('发布成功', 'success');
 						} else {
-							self.alertDialog('发布失败', 'danger');
+							self.alertDialog(res.msg, 'danger');
 						}
 					},
 					error: function(){

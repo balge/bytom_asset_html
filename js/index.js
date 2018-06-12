@@ -3,10 +3,16 @@ $(function() {
 		init: function() {
 			var self = this;
 			self.userName = self.getCookie('username');
+			self.exchangeItems = [];
+			var localItems = self.getItem('exchangeItems');
+			if(localItems){
+				self.exchangeItems = self.exchangeItems.concat(JSON.parse(localItems));
+			}
 			self.pageSize = 10;
 			self.loginStatus();
 			self.renderAsset();
 			self.buyAsset();
+			self.exchangeAsset();
 			self.watchDesc();
 			self.logout();
 		},
@@ -29,29 +35,6 @@ $(function() {
 				username: self.userName
 			});
 			$('.welcome-txt').html(welcomeHtml);
-		},
-		validateForm: function() {
-			var self = this;
-			$('#buyForm').bootstrapValidator({
-				feedbackIcons: {
-					valid: 'glyphicon glyphicon-ok',
-					invalid: 'glyphicon glyphicon-remove',
-					validating: 'glyphicon glyphicon-refresh'
-				},
-				fields: {
-					buyNum: {
-						validators: {
-							notEmpty: {
-								message: '购买数量不得为空'
-							},
-							regexp: {
-								regexp: "^[1-9][0-9]*$",
-								message: '购买数量必须为大于0的正整数'
-							}
-						}
-					}
-				}
-			})
 		},
 		renderAsset: function(pageNum, isReRender) {
 			var self = this;
@@ -89,56 +72,105 @@ $(function() {
 			$('body').on('click', '.btn-buyAsset', function(event) {
 				event.preventDefault();
 				index = $(this).parents('tr.item').attr('data-index');
-				var BuyModalHtml = template($('#buyModalTpl').html());
-				$('.buyModal').html(BuyModalHtml);
-				self.validateForm();
+				var modalHtml = template($('#buyModalTpl').html(), {
+		        	type: 'buy'
+		    	});
+				$('.buyModal').html(modalHtml);
 				$('#buyModal').modal();
 			});
 			$('body').on('click', '.btn-sureBuy', function(event) {
 				event.preventDefault();
 				$('.dialog-box').removeClass('show'); //立即清除弹窗
 				$('.alert.alert-dismissible').alert('close'); //立即清除弹窗
-				var bootstrapValidator = $('#buyForm').data('bootstrapValidator');
-				bootstrapValidator.validate();
-				if (bootstrapValidator.isValid()) {
-					var params = {
-						"assets_id": $('tr.item').eq(index).find('.owner').attr('data-data'),
-						"assets_name": $('tr.item').eq(index).find('.name').attr('data-data'),
-						"assets_num": parseInt($('#buyNum').val()),
-						"id": $('tr.item').eq(index).attr('data-itemid'),
-						"email": self.getCookie('email')
-					}
-					$.ajax({
-						url: window.url + '/api/assets_purchase',
-						type: 'POST',
-						dataType: 'json',
-						contentType: 'application/json',
-						data: JSON.stringify(params),
-						// crossDomain: true,
-						// xhrFields: {
-						// 	withCredentials: true
-						// },
-						success: function(res) {
-							// console.log(res)
-							if (res.code == 200) {
-								self.renderAsset();
-								self.alertDialog('购买成功', 'success');
-							} else {
-								self.alertDialog('购买失败', 'danger');
-							}
-						},
-						error: function() {
-							//失败情况处理
-							self.alertDialog('购买失败', 'danger');
-						}
-					});
-					$('#buyModal').modal('hide');
-					$('#buyModal').on('hidden.bs.modal', function() {
-						$('.buyModal').html('');
-					})
+				var params = {
+					"assets_id": $('tr.item').eq(index).find('.owner').attr('data-data'),
+					"assets_name": $('tr.item').eq(index).find('.name').attr('data-data'),
+					"assets_num": 1,
+					"id": $('tr.item').eq(index).attr('data-itemid'),
+					"email": self.getCookie('email')
 				}
+				$.ajax({
+					url: window.url + '/api/assets_purchase',
+					type: 'POST',
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(params),
+					// crossDomain: true,
+					// xhrFields: {
+					// 	withCredentials: true
+					// },
+					success: function(res) {
+						// console.log(res)
+						if (res.code == 200) {
+							self.renderAsset();
+							self.alertDialog('购买成功', 'success');
+						} else {
+							self.alertDialog(res.msg, 'danger');
+						}
+					},
+					error: function() {
+						//失败情况处理
+						self.alertDialog('购买失败', 'danger');
+					}
+				});
+				$('#buyModal').modal('hide');
+				$('#buyModal').on('hidden.bs.modal', function() {
+					$('.buyModal').html('');
+				})
 			});
 		},
+		//本地mock
+		exchangeAsset: function() {
+			var self = this;
+			var index = 0;
+			$('body').on('click', '.btn-exchangeAsset', function(event) {
+				event.preventDefault();
+				index = $(this).parents('tr.item').attr('data-index');
+				var modalHtml = template($('#buyModalTpl').html(), {
+		        	type: 'exchange'
+		    	});
+				$('.buyModal').html(modalHtml);
+				$('#buyModal').modal();
+			});
+			$('body').on('click', '.btn-sureExchange', function(event) {
+				event.preventDefault();
+				var params = {
+					"assets_id": $('tr.item').eq(index).find('.owner').attr('data-data'),
+					"assets_name": $('tr.item').eq(index).find('.name').attr('data-data'),
+					"assets_price": $('tr.item').eq(index).find('.price').attr('data-data'),
+					"assets_desc": $('tr.item').eq(index).find('.btn-watchDesc').attr('data-desc'),
+					"id": $('tr.item').eq(index).attr('data-itemid'),
+					"email": self.getCookie('email')
+				};
+				var res = {
+					code: 200,
+					msg: ''
+				};
+				if (res.code == 200) {
+					self.alertDialog('兑换申请提交', 'success');
+				} else {
+					self.alertDialog(res.msg, 'danger');
+				}
+				$('#buyModal').modal('hide');
+				$('#buyModal').on('hidden.bs.modal', function() {
+					$('.buyModal').html('');
+				})
+				var value = {
+					"assets_id": params.assets_id,
+					"id": params.id,
+			    	"name": params.assets_name,
+			    	"price": params.assets_price,
+			    	"desc": params.assets_desc,
+			    	"email": self.getCookie('email')
+			    };
+			    if(!JSON.stringify(self.exchangeItems).includes(JSON.stringify(value))){
+			    	self.exchangeItems.push(value);
+			    	self.setItem('exchangeItems', JSON.stringify(self.exchangeItems));
+			    }
+			});
+
+		},
+
 		watchDesc: function() {
 			var self = this;
 			$('body').on('click', '.btn-watchDesc', function(event) {
@@ -187,6 +219,7 @@ $(function() {
 				self.setCookie('username', '', -1);
 				self.setCookie('email', '', -1);
 				self.setItem('items', JSON.stringify(new Array()));
+				self.setItem('exchangeItems', JSON.stringify(new Array()));
 				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 			});
 		},

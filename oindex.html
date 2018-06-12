@@ -6,12 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="巴比特始建于2011年，是国内最早的区块链（blockchain）资讯社区门户，为区块链创业者、投资者提供信息、交流与投融资服务。开放是我们的广度，中立是我们的态度，敏锐是我们的深度，欢迎一切区块链技术的探讨争鸣。目前有200多位区块链意见领袖、研究者入驻平台。如果您是我们的同类，欢迎加入我们！" name="description">
 	<meta content="比特币,比特币资讯,区块链,区块链资讯,数字货币,数字货币资讯,虚拟货币,虚拟货币资讯" name="keywords">
-	<title>个人资产-已购买资产</title>
+	<title>首页</title>
 	<link rel="icon" href="./img/favicon.ico" />
 	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./css/header.css">
-	<link rel="stylesheet" href="./css/my_asset.css">
+	<link rel="stylesheet" href="./css/index.css">
+	<link rel="stylesheet" href="./css/rl.css">
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -36,39 +37,32 @@
 	</div>
 	<div class="container">
 		<!-- <div class="row"> -->
-			<div class="col-sm-12 J_tab">
-				<ul class="tab-nav clearfix">
-					<li><a href="my_asset.html">资产概况</a></li>
-					<li><a href="published_asset.html">已发布资产</a></li>
-					<li class="active"><a href="purchased_asset.html">已购买资产</a></li>
-					<li><a href="create_asset.html">创建资产</a></li>
-					<li><a href="pending_asset.html">待审核/发布资产</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pannel asset-owner clearfix">
-						<div class="asset-block">
-							<h3>已购买资产</h3>
-							<div class="asset-table">
-							</div>
-							<!-- <div class="pagination-wrap">
-							  <ul class="pagination"></ul>
-							</div> -->
-						</div>
-					</div>
+			<div class="welcome-txt"></div>
+			<div class="col-sm-12 asset-box">
+				<h3>可购买资产</h3>
+				<div class="asset-table">
+					
 				</div>
+				<!-- <div class="pagination-wrap">
+				  <ul class="pagination"></ul>
+				</div> -->
 			</div>
 		<!-- </div> -->
 	</div>
-	
+
+	<div class="buyModal">
+		
+	</div>
+
 	<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">资产详细描述</h4>
+			        <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
 			    </div>
 			    <div class="modal-body">
-			     	
+			    	
       			</div>
       			<div class="modal-footer">
 			        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
@@ -76,21 +70,24 @@
 			</div>
 		</div>
 	</div>
+	<div class="dialog-box"></div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/template.js"></script>
 <!-- <script src="./js/jqPaginator.js"></script> -->
-<script src="./js/purchased_asset.js"></script>
+<!-- <script src="./js/validate.js"></script> -->
+<script src="./js/index.js"></script>
 <script src="./js/apiUrl.js"></script>
 
+<!-- template测试 -->
 <script id="navTpl" type="text/html">
     <ul class="nav navbar-nav navbar-left">
 		<li>
-        	<a href="oindex.html">首页</a>
+        	<a class="active" href="oindex.html">首页</a>
         </li>
         <li>
-            <a class="active" href="my_asset.html">个人资产</a>
+            <a href="my_asset.html">个人资产</a>
         </li>
         <li>
             <a href="asset_center.html">资产中心</a>
@@ -115,28 +112,67 @@
         <% } %>
 	</ul>
 </script>
-
+<script id="welTpl" type="text/html">
+	<% if(loginStatus === true){ %>
+		<h1>欢迎回来，<%=username%></h1>
+	<% }else{ %>
+		<h1>个人首页</h1>
+	<% } %>
+</script>
 <script id="assetTpl" type="text/html">
 	<table class="table table-hover table-bordered">
 		<tr>
 			<th>资产名称</th>
-			<th>资产数量</th>
-			<th>发布时间</th>
 			<th>发行机构/人</th>
+			<th>发布时间</th>
+			<th>价格</th>
 			<th>操作</th>
 		</tr>
 		<%for(var i in items){%> 
-		<tr data-id="<%= items[i].id%>">
-			<td><%= items[i].assets_name%></td>
-			<td><%= items[i].assets_num%></td>
-			<td><%= items[i].time%></td>
-			<td><%= items[i].assets_id%></td>
+		<tr class="item" data-index="<%= i%>" data-itemid="<%= items[i].id%>">
+			<td class="name" data-data="<%= items[i].name%>"><%= items[i].name%></td>
+			<td class="owner" data-data="<%= items[i].id%>"><%= items[i].id%></td>
+			<td class="time"><%= items[i].time%></td>
+			<td class="price" data-data="<%= items[i].price%>"><%= items[i].price.toFixed(2)%></td>
 			<td>
+				<button type="button" class="btn btn-exchangeAsset btn-success">兑换</button>
+				<button type="button" class="btn btn-buyAsset btn-warning">购买</button>
 				<button type="button" class="btn btn-watchDesc btn-info" data-toggle="modal" data-target="#descModal" data-desc="<%= items[i].assets_desc%>">详情</a>
 			</td>
 		</tr>
 		<%}%>
 	</table>
+</script>
+
+<script id="buyModalTpl" type="text/html">
+	<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+			    </div>
+			    <div class="modal-body">
+			    	<% if(type === 'buy'){%>
+			    	<p style="margin: 0;">确定购买此资产？</p>
+			    	<% }else{%>
+			    	<p style="margin: 0;">确定兑换此资产？</p>
+			    	<% }%>
+			    </div>
+      			<div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			        <button type="button" class="btn btn-primary <% if(type === 'buy'){%>btn-sureBuy<% }else{%>btn-sureExchange<% }%>" data-dismiss="modal">确定</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="alertTpl" type="text/html">
+    <div class="alert alert-<%= type%> alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <h4><%= text%></h4>
+    </div>
 </script>
 
 </html>

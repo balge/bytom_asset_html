@@ -68,17 +68,6 @@ $(function(){
 		                    },
 		                }
 		            },
-		            num: {
-		                validators: {
-		                    notEmpty: {
-		                        message: '资产数量不得为空'
-		                    },
-		                    regexp: {
-					            regexp: "^[1-9][0-9]*$",
-					            message: '资产数量必须为大于0的正整数'
-					        }
-		                }
-		            },
 		            price: {
 		                validators: {
 		                    notEmpty: {
@@ -102,12 +91,11 @@ $(function(){
 				bootstrapValidator.validate();
 				if(bootstrapValidator.isValid()){
 					var oName = $('#name').val();
-				    var oNum = $('#num').val();
 				    var oDesc = $('#desc').val();
 				    var oPrice = $('#price').val();
 				    self.items.push({
 				    	name: oName,
-				    	num: oNum,
+				    	num: 1,
 				    	desc: oDesc,
 				    	price: oPrice
 				    });
@@ -132,7 +120,6 @@ $(function(){
 			    $('.addModal').html(AddModalHtml);
 				index = parseInt($(this).parents('tr').attr('data-id'));
 				$('#name').val($(this).parents('tr').find('.name').text());
-				$('#num').val($(this).parents('tr').find('.num').text());
 				$('#desc').val($(this).parents('tr').find('.desc').text());
 				$('#price').val($(this).parents('tr').find('.price').text());
 				//赋值给显示的表单
@@ -147,15 +134,14 @@ $(function(){
 			$('body').on('click', '#updata', function(event) {
 				event.preventDefault();
 				var oName = $('#name').val();
-			    var oNum = $('#num').val();
 			    var oDesc = $('#desc').val();
 			    var oPrice = $('#price').val();
 			    //修改items列表
-			    if(oName !== '' && oNum !== '' && oDesc !== '' && oPrice !== ''){
+			    if(oName !== '' && oDesc !== '' && oPrice !== ''){
 				    var items = self.items;
 					items.splice(index,1,{
 						name: oName,
-				    	num: oNum,
+						num: 1,
 				    	desc: oDesc,
 				    	price: oPrice
 					});//删除返回新元素
@@ -259,7 +245,7 @@ $(function(){
 				event.preventDefault();
 				var params = {
 					name: $('tr.item').eq(self.index).find('.name').text(),
-			    	num: $('tr.item').eq(self.index).find('.num').text(),
+					num: 1,
 			    	desc: $('tr.item').eq(self.index).find('.desc').text(),
 			    	email: self.getCookie('email')
 				};
@@ -280,10 +266,8 @@ $(function(){
 							self.items = items;
 							self.handleReRender();//渲染列表
 							self.setItem('items', JSON.stringify(self.items));
-			      		}else if(res.code == -1) {
-			      			self.alertDialog('请前往个人中心认证身份', 'danger')
 			      		}else{
-			      			self.alertDialog('提交失败，请重试', 'danger')
+			      			self.alertDialog(res.msg, 'danger')
 			      		}
 			        },
 			        error: function(){
