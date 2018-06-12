@@ -22,7 +22,7 @@ $(function() {
 				var loginStatus = true;
 			} else {
 				var loginStatus = false;
-				window.location.href = 'login.html';
+				window.location.href = 'login.html?redirect_uri=' + encodeURIComponent(window.location.href);
 				return false;
 			}
 			var navBarHtml = template($('#navTpl').html(), {
