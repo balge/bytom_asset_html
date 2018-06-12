@@ -6,12 +6,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="巴比特始建于2011年，是国内最早的区块链（blockchain）资讯社区门户，为区块链创业者、投资者提供信息、交流与投融资服务。开放是我们的广度，中立是我们的态度，敏锐是我们的深度，欢迎一切区块链技术的探讨争鸣。目前有200多位区块链意见领袖、研究者入驻平台。如果您是我们的同类，欢迎加入我们！" name="description">
 	<meta content="比特币,比特币资讯,区块链,区块链资讯,数字货币,数字货币资讯,虚拟货币,虚拟货币资讯" name="keywords">
-	<title>个人资产-资产概况</title>
+	<title>个人资产-兑换的资产</title>
 	<link rel="icon" href="./img/favicon.ico" />
 	<link rel="stylesheet" href="./css/bootstrap.min.css">
 	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./css/header.css">
 	<link rel="stylesheet" href="./css/my_asset.css">
+	<link rel="stylesheet" href="./css/rl.css">
 	<script>
 		window.DEBUGGER = true;//全局切换本地线上状态
 	</script>
@@ -38,20 +39,29 @@
 		<!-- <div class="row"> -->
 			<div class="col-sm-12 J_tab">
 				<ul class="tab-nav clearfix">
-					<li class="active"><a href="my_asset.html">资产概况</a></li>
+					<li><a href="my_asset.html">资产概况</a></li>
 					<li><a href="published_asset.html">已发布资产</a></li>
 					<li><a href="purchased_asset.html">已购买资产</a></li>
 					<li><a href="create_asset.html">创建资产</a></li>
 					<li><a href="pending_asset.html">待审核/发布资产</a></li>
 					<li><a href="exchange_asset.html">兑换资产审核</a></li>
-					<li><a href="myexchange_asset.html">我兑换的资产</a></li>
+					<li class="active"><a href="myexchange_asset.html">我兑换的资产</a></li>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pannel asset-survey clearfix">
-						<div class="asset-block">
-							<h3>资产概况</h3>
-							<div class="survey-list clearfix">
-								
+					<div class="tab-pannel asset-exchange clearfix">
+						<div class="asset-table">
+							<h3>兑换资产</h3>
+							<div class="table-box">
+								<table class="table table-hover table-bordered">
+									<tr>
+										<!-- <th><input class="checkAll" type="checkbox" />全选</th> -->
+										<th>序号</th>
+										<th>资产名称</th>
+										<th>资产描述</th>
+										<th>资产价格</th>
+										<th>操作</th>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</div><!-- 概况 -->
@@ -59,12 +69,14 @@
 			</div>
 		<!-- </div> -->
 	</div>
+
+	<div class="dialog-box"></div>
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/template.js"></script>
 <!-- <script src="./js/jqPaginator.js"></script> -->
-<script src="./js/my_asset.js"></script>
+<script src="./js/myexchange_asset.js"></script>
 <script src="./js/apiUrl.js"></script>
 
 <script id="navTpl" type="text/html">
@@ -98,28 +110,29 @@
         <% } %>
 	</ul>
 </script>
-
-<script id="surveyTpl" type="text/html">
-	<div class="row">
-		<div class="col-sm-4"><a href="published_asset.html">
-			<div class="survey-block block0">
-				个人发布的资产:
-				<span><%=items.issue%></span>
-			</div>
-		</a></div>
-		<div class="col-sm-4"><a href="purchased_asset.html">
-			<div class="survey-block block1">
-				个人购买的资产:
-				<span><%=items.purchase%></span>
-			</div>
-		</a></div>
-		<div class="col-sm-4"><a href="pending_asset.html">
-			<div class="survey-block block2">
-				待审核/发布的资产:
-				<span><%=items.audited%></span>
-			</div>
-		</a></div>
-	</div>
+<script id="assetTpl" type="text/html">
+	<tbody>
+		<tr>
+			<th>资产发布人/机构</th>
+			<th>资产名称</th>
+			<th>资产描述</th>
+			<th>资产价格</th>
+			<th>操作</th>
+		</tr>
+		<%for(var i in items){%> 
+		<tr class="item" data-id="<%= i%>">
+			<td><%= items[i].assets_id%></td>
+			<td class="name"><%= items[i].name%></td>
+			<td class="desc-wrap">
+				<p class="desc" style="display:none;"><%= items[i].desc%></p>
+				<p class="showdesc" title="<%= items[i].desc%>"><% if(items[i].desc.length >= 10){%><%= items[i].desc.substr(0,10)%>...<%}else{%><%= items[i].desc%><%}%></p>
+			</td>
+			<td class="price"><%= parseInt(items[i].price).toFixed(2)%></td>
+			<td>
+				<input type="button" name="" value="审批中..." class="btn btn-info" disabled="disabled" />
+			</td>
+		</tr>
+		<% }%>
+	</tbody>
 </script>
-
 </html>

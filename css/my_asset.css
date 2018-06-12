@@ -21,7 +21,7 @@
   font-size: 18px;
   line-height: 50px;
   height: 50px;
-  width: 20%;
+  width: 14.28571429%;
   cursor: pointer;
   border-right: 1px solid #e5e5e5;
 }
@@ -92,23 +92,28 @@
   background-color: #EE8262;
 }
 .J_tab .tab-content .asset-pending .table-box,
-.J_tab .tab-content .asset-create .table-box {
+.J_tab .tab-content .asset-create .table-box,
+.J_tab .tab-content .asset-exchange .table-box {
   padding: 20px 0;
 }
 .J_tab .tab-content .asset-pending .table-box table td,
-.J_tab .tab-content .asset-create .table-box table td {
+.J_tab .tab-content .asset-create .table-box table td,
+.J_tab .tab-content .asset-exchange .table-box table td {
   width: 18%;
 }
 .J_tab .tab-content .asset-pending .table-box table td:nth-child(1),
-.J_tab .tab-content .asset-create .table-box table td:nth-child(1) {
+.J_tab .tab-content .asset-create .table-box table td:nth-child(1),
+.J_tab .tab-content .asset-exchange .table-box table td:nth-child(1) {
   width: 10%;
 }
 .J_tab .tab-content .asset-pending .table-box table td:nth-last-child(1),
-.J_tab .tab-content .asset-create .table-box table td:nth-last-child(1) {
+.J_tab .tab-content .asset-create .table-box table td:nth-last-child(1),
+.J_tab .tab-content .asset-exchange .table-box table td:nth-last-child(1) {
   width: 18%;
 }
 .J_tab .tab-content .asset-pending .table-box table .checkAll,
-.J_tab .tab-content .asset-create .table-box table .checkAll {
+.J_tab .tab-content .asset-create .table-box table .checkAll,
+.J_tab .tab-content .asset-exchange .table-box table .checkAll {
   position: relative;
   vertical-align: top;
   top: 8px;
