@@ -56,6 +56,13 @@ $(function(){
 		                        message: '资产名称长度在1-15个字符之间'
 		                    },
 		                }
+					},
+					assetfile: {
+		                validators: {
+		                	notEmpty: {
+		                        message: '请上传资产文件'
+		                    }
+		                }
 		            },
 		            desc: {
 		                validators: {
@@ -93,11 +100,13 @@ $(function(){
 					var oName = $('#name').val();
 				    var oDesc = $('#desc').val();
 				    var oPrice = $('#price').val();
+				    var oFilename = $('.file-preview .file-caption-info').html();
 				    self.items.push({
 				    	name: oName,
 				    	num: 1,
 				    	desc: oDesc,
-				    	price: oPrice
+						price: oPrice,
+						filename: oFilename
 				    });
 				    $('#myModal').modal('hide');
 				    $('#myModal').on('hidden.bs.modal',function() {
@@ -135,15 +144,18 @@ $(function(){
 				event.preventDefault();
 				var oName = $('#name').val();
 			    var oDesc = $('#desc').val();
-			    var oPrice = $('#price').val();
+				var oPrice = $('#price').val();
+				var oFilename = $('.file-preview .file-caption-info').html();
+			
 			    //修改items列表
-			    if(oName !== '' && oDesc !== '' && oPrice !== ''){
+			    if(oName !== '' && oDesc !== '' && oPrice !== '' && oFilename !== ''){
 				    var items = self.items;
 					items.splice(index,1,{
 						name: oName,
 						num: 1,
 				    	desc: oDesc,
-				    	price: oPrice
+						price: oPrice,
+						filename: oFilename
 					});//删除返回新元素
 					self.items = items;
 					$('#myModal').modal('hide');
@@ -198,7 +210,8 @@ $(function(){
 			$('.add-asset').on('click', function(event) {
 				event.preventDefault();
 				var AddModalHtml = template($('#addModalTpl').html());
-			    $('.addModal').html(AddModalHtml);
+				$('.addModal').html(AddModalHtml);
+				$("#assetfile").fileinput({showCaption: false, dropZoneEnabled: false, showUpload:false, showRemove: false, showPreview: true, maxFileCount: 1, autoReplace: true});
 			    self.validateForm();
 				$('#myModal').modal();
 			});

@@ -26,6 +26,9 @@
   width: 18%;
   white-space: nowrap;
 }
+.asset-box .asset-table table td.assetid {
+  white-space: normal;
+}
 .asset-box .asset-table table td p {
   margin: 0;
 }

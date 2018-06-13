@@ -1,3 +1,3 @@
 (function (url){
 	return window.url = url;
-})('http://192.168.199.62:8000')
+})('http://192.168.1.150:8000')

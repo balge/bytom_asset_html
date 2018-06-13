@@ -62,8 +62,9 @@ $(function(){
 				success: function(res){
 					// console.log(JSON.parse(res.data))
 					if(res.code == 200 && res.data && JSON.parse(res.data).length > 0){
+						var data = JSON.parse(res.data);
 						var assetHtml = template($('#assetTpl').html(), {
-							items: JSON.parse(res.data)
+							items: data
 					    });
 					    $('.asset-table').html(assetHtml);
 					 //    if(!isReRender || isReRender != true){

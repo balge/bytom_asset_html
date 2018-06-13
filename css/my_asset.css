@@ -1,3 +1,7 @@
+.fileinput-remove,
+.kv-file-content,.file-upload-indicator,.file-actions {
+  display: none;
+}
 .J_tab {
   background-color: #fff;
   padding: 20px 20px 20px 20px;
